@@ -2,17 +2,8 @@
 'use client';
 
 import Image from 'next/image';
-import { MoreHorizontal, Edit, Trash2, ShoppingBag } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { Product } from '@/lib/types';
 import type { ReactNode } from 'react';
@@ -25,23 +16,34 @@ interface ProductCardProps {
 const LOW_STOCK_THRESHOLD = 20;
 
 export function ProductCard({ product, children }: ProductCardProps) {
-  const getProductImage = (imageId: string) => {
-    return PlaceHolderImages.find((img) => img.id === imageId)?.imageUrl || '';
+  
+  const getProductImage = (imageIdentifier: string) => {
+    if (imageIdentifier.startsWith('data:image/')) {
+        return imageIdentifier;
+    }
+    return PlaceHolderImages.find((img) => img.id === imageIdentifier)?.imageUrl || '';
   };
 
   const isLowStock = product.quantity < LOW_STOCK_THRESHOLD;
+  const imageUrl = getProductImage(product.image);
 
   return (
     <Card className="glassmorphic overflow-hidden transition-transform duration-200 hover:scale-[1.02] hover:shadow-2xl">
       <CardHeader className="relative p-0">
-        <Image
-          src={getProductImage(product.image)}
-          alt={product.name}
-          width={400}
-          height={300}
-          className="aspect-video w-full object-cover"
-          data-ai-hint={PlaceHolderImages.find(img => img.id === product.image)?.imageHint}
-        />
+        {imageUrl ? (
+            <Image
+            src={imageUrl}
+            alt={product.name}
+            width={400}
+            height={300}
+            className="aspect-video w-full object-cover"
+            data-ai-hint={!product.image.startsWith('data:image/') ? PlaceHolderImages.find(img => img.id === product.image)?.imageHint : undefined}
+            />
+        ) : (
+            <div className="aspect-video w-full bg-muted flex items-center justify-center text-muted-foreground">
+                No Image
+            </div>
+        )}
         {isLowStock && (
           <Badge variant="destructive" className="absolute top-2 right-2">
             {'Low Stock'}

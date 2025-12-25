@@ -62,7 +62,7 @@ export default function EditProductPage() {
 
   const buyPrice = form.watch('buyPrice');
   const sellPrice = form.watch('sellPrice');
-  const imageId = form.watch('image');
+  const imageValue = form.watch('image');
   const profit = isNaN(sellPrice) || isNaN(buyPrice) ? 0 : sellPrice - buyPrice;
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -83,7 +83,15 @@ export default function EditProductPage() {
     router.push('/products');
   };
   
-  const selectedImage = PlaceHolderImages.find(p => p.id === imageId);
+  const getSelectedImage = (value: string) => {
+    if (value.startsWith('data:image/')) {
+        return value;
+    }
+    return PlaceHolderImages.find(p => p.id === value)?.imageUrl || '';
+  }
+
+  const selectedImageUrl = getSelectedImage(imageValue || '');
+
 
   if (!product) {
     return (
@@ -99,7 +107,7 @@ export default function EditProductPage() {
   return (
     <div suppressHydrationWarning>
       <Header title={'Edit Product'} />
-      <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
+      <div className="flex-1 space-y-4 p-4 pt-6 md:p-8" suppressHydrationWarning>
         <div className="flex items-center gap-4">
             <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => router.back()}>
                 <ArrowLeft className="h-4 w-4" />
@@ -237,10 +245,10 @@ export default function EditProductPage() {
                             <FormItem>
                                 <FormLabel>{'Product Image'}</FormLabel>
                                 <Card className="mt-2 flex aspect-square w-full items-center justify-center overflow-hidden">
-                                    {selectedImage ? (
+                                    {selectedImageUrl ? (
                                         <Image
-                                            src={selectedImage.imageUrl}
-                                            alt={selectedImage.description}
+                                            src={selectedImageUrl}
+                                            alt="Selected product image"
                                             width={400}
                                             height={400}
                                             className="h-full w-full object-cover"

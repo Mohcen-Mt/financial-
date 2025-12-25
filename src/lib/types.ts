@@ -1,6 +1,4 @@
 
-import type { PlaceHolderImages } from './placeholder-images';
-
 export type Product = {
   id: string;
   name: string;
@@ -10,7 +8,7 @@ export type Product = {
   quantity: number;
   color: string;
   size: string;
-  image: (typeof PlaceHolderImages)[number]['id'];
+  image: string; // Can be a placeholder ID or a data URI
   profit: number;
   addedDate: string;
 };

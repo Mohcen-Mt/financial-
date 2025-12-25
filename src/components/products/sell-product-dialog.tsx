@@ -88,9 +88,14 @@ export function SellProductDialog({ product, onOpenChange }: SellProductDialogPr
     onOpenChange(false);
   };
   
-  const getProductImage = (imageId: string) => {
-    return PlaceHolderImages.find((img) => img.id === imageId)?.imageUrl || '';
+  const getProductImage = (imageIdentifier: string) => {
+    if (imageIdentifier.startsWith('data:image/')) {
+        return imageIdentifier;
+    }
+    return PlaceHolderImages.find((img) => img.id === imageIdentifier)?.imageUrl || '';
   };
+  
+  const imageUrl = getProductImage(product.image);
 
   return (
     <Dialog open={!!product} onOpenChange={onOpenChange}>
@@ -100,13 +105,19 @@ export function SellProductDialog({ product, onOpenChange }: SellProductDialogPr
           <DialogDescription>Record a sale for the selected product.</DialogDescription>
         </DialogHeader>
         <div className="flex items-center gap-4 rounded-lg border p-4">
-            <Image
-                src={getProductImage(product.image)}
-                alt={product.name}
-                width={64}
-                height={64}
-                className="rounded-md object-cover"
-            />
+            {imageUrl ? (
+                <Image
+                    src={imageUrl}
+                    alt={product.name}
+                    width={64}
+                    height={64}
+                    className="rounded-md object-cover"
+                />
+            ): (
+                <div className="flex h-16 w-16 items-center justify-center rounded-md bg-muted text-muted-foreground">
+                    No Image
+                </div>
+            )}
             <div>
                 <h3 className="font-semibold">{product.name}</h3>
                 <p className="text-sm text-muted-foreground">

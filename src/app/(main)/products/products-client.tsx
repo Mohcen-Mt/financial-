@@ -81,8 +81,11 @@ export function ProductsClient() {
     });
   }, [products, searchTerm, categoryFilter]);
     
-  const getProductImage = (imageId: string) => {
-    return PlaceHolderImages.find((img) => img.id === imageId)?.imageUrl || '';
+  const getProductImage = (imageIdentifier: string) => {
+    if (imageIdentifier.startsWith('data:image/')) {
+        return imageIdentifier;
+    }
+    return PlaceHolderImages.find((img) => img.id === imageIdentifier)?.imageUrl || '';
   };
 
   const handleDelete = () => {
@@ -238,17 +241,18 @@ export function ProductsClient() {
                         <TableBody>
                         {filteredProducts.map((product) => {
                             const isLowStock = product.quantity < LOW_STOCK_THRESHOLD;
+                            const imageUrl = getProductImage(product.image);
                             return (
                                 <TableRow key={product.id}>
                                 <TableCell>
                                     <div className="flex items-center gap-4">
                                         <Image
-                                        src={getProductImage(product.image)}
+                                        src={imageUrl}
                                         alt={product.name}
                                         width={40}
                                         height={40}
                                         className="rounded-md object-cover"
-                                        data-ai-hint={PlaceHolderImages.find(img => img.id === product.image)?.imageHint}
+                                        data-ai-hint={!product.image.startsWith('data:image/') ? PlaceHolderImages.find(img => img.id === product.image)?.imageHint : undefined}
                                         />
                                         <div>
                                         <div className="font-medium">{product.name}</div>

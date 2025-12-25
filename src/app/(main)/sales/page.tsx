@@ -29,8 +29,12 @@ export default function SalesPage() {
     }).sort((a, b) => new Date(b.saleDate).getTime() - new Date(a.saleDate).getTime());
   }, [sales, products]);
 
-  const getProductImage = (imageId: string) => {
-    return PlaceHolderImages.find((img) => img.id === imageId)?.imageUrl || null;
+  const getProductImage = (imageIdentifier: string) => {
+    if (!imageIdentifier) return null;
+    if (imageIdentifier.startsWith('data:image/')) {
+        return imageIdentifier;
+    }
+    return PlaceHolderImages.find((img) => img.id === imageIdentifier)?.imageUrl || null;
   };
 
   return (
@@ -57,7 +61,7 @@ export default function SalesPage() {
                 </TableHeader>
                 <TableBody>
                     {salesWithProductDetails.map(sale => {
-                        const imageUrl = sale.productExists ? getProductImage(sale.productImage) : null;
+                        const imageUrl = getProductImage(sale.productImage);
                         return (
                             <TableRow key={sale.id}>
                                 <TableCell>
@@ -69,7 +73,7 @@ export default function SalesPage() {
                                                 width={40}
                                                 height={40}
                                                 className="rounded-md object-cover"
-                                                data-ai-hint={PlaceHolderImages.find(img => img.id === sale.productImage)?.imageHint}
+                                                data-ai-hint={!sale.productImage.startsWith('data:image/') ? PlaceHolderImages.find(img => img.id === sale.productImage)?.imageHint : undefined}
                                             />
                                         ) : (
                                             <div className="flex h-10 w-10 items-center justify-center rounded-md bg-muted">
@@ -114,5 +118,3 @@ export default function SalesPage() {
     </>
   );
 }
-
-    
