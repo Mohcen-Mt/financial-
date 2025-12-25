@@ -54,11 +54,11 @@ import { SellProductDialog } from '@/components/products/sell-product-dialog';
 
 const LOW_STOCK_THRESHOLD = 20;
 
-export function ProductsClient({ products }: { products: Product[] }) {
+export function ProductsClient() {
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
-  const { deleteProduct } = useProducts();
+  const { products, deleteProduct } = useProducts();
   const { toast } = useToast();
   const router = useRouter();
 
@@ -66,11 +66,13 @@ export function ProductsClient({ products }: { products: Product[] }) {
 
 
   const categories = useMemo(() => {
+    if (!products) return ['all'];
     const allCategories = products.map((p) => p.category);
     return ['all', ...Array.from(new Set(allCategories))];
   }, [products]);
 
   const filteredProducts = useMemo(() => {
+    if (!products) return [];
     return products.filter((product) => {
       const name = product.name;
       const matchesSearch = name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -275,7 +277,7 @@ export function ProductsClient({ products }: { products: Product[] }) {
                     </div>
                 </CardHeader>
                 <CardContent className="text-center">
-                    <CardTitle className="font-headline text-2xl">No Products Found</CardTitle>
+                    <CardTitle className="font-headline text-2xl">{'No Products Found'}</CardTitle>
                     <CardDescription className="mt-2">{"You haven't added any products yet. Get started by adding one."}</CardDescription>
                 </CardContent>
                 <CardFooter>
