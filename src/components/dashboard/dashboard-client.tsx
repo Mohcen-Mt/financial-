@@ -44,7 +44,7 @@ export function DashboardClient({ stats, weeklyProfitData, recentProducts }: Das
   return (
     <>
       <Header title={'Dashboard'} />
-      <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
+      <div className="flex-1 space-y-4 p-4 pt-6 md:p-8" suppressHydrationWarning>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (
             <StatCard
