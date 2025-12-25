@@ -11,10 +11,14 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
+    <div suppressHydrationWarning>
       <ProductsProvider>
         <SalesProvider>
             <MainLayoutClient>{children}</MainLayoutClient>
         </SalesProvider>
       </ProductsProvider>
+    </div>
   );
 }
+
+    

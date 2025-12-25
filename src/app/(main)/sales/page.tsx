@@ -23,13 +23,14 @@ export default function SalesPage() {
         ...sale,
         productName: product?.name || 'Unknown Product',
         productImage: product?.image || '',
-        productCategory: product?.category || 'N/A'
+        productCategory: product?.category || 'N/A',
+        productExists: !!product,
       };
     }).sort((a, b) => new Date(b.saleDate).getTime() - new Date(a.saleDate).getTime());
   }, [sales, products]);
 
   const getProductImage = (imageId: string) => {
-    return PlaceHolderImages.find((img) => img.id === imageId)?.imageUrl || '';
+    return PlaceHolderImages.find((img) => img.id === imageId)?.imageUrl || null;
   };
 
   return (
@@ -55,38 +56,47 @@ export default function SalesPage() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {salesWithProductDetails.map(sale => (
-                    <TableRow key={sale.id}>
-                        <TableCell>
-                            <div className="flex items-center gap-4">
-                                <Image
-                                src={getProductImage(sale.productImage)}
-                                alt={sale.productName}
-                                width={40}
-                                height={40}
-                                className="rounded-md object-cover"
-                                data-ai-hint={PlaceHolderImages.find(img => img.id === sale.productImage)?.imageHint}
-                                />
-                                <div>
-                                    <div className="font-medium">{sale.productName}</div>
-                                    <div className="text-sm text-muted-foreground">{sale.productCategory}</div>
-                                </div>
-                            </div>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell">
-                            <div className="font-medium">{sale.customerName}</div>
-                            <div className="text-sm text-muted-foreground">{sale.customerPhone}</div>
-                        </TableCell>
-                        <TableCell className="text-center font-mono">{sale.quantitySold}</TableCell>
-                        <TableCell className="text-center">
-                            <Badge variant="outline" className="font-mono">
-                                +{sale.totalProfit.toFixed(2)} دج
-                            </Badge>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell text-center">{sale.paymentMethod}</TableCell>
-                        <TableCell className="text-right font-mono">{new Date(sale.saleDate).toLocaleDateString()}</TableCell>
-                    </TableRow>
-                    ))}
+                    {salesWithProductDetails.map(sale => {
+                        const imageUrl = sale.productExists ? getProductImage(sale.productImage) : null;
+                        return (
+                            <TableRow key={sale.id}>
+                                <TableCell>
+                                    <div className="flex items-center gap-4">
+                                        {imageUrl ? (
+                                            <Image
+                                                src={imageUrl}
+                                                alt={sale.productName}
+                                                width={40}
+                                                height={40}
+                                                className="rounded-md object-cover"
+                                                data-ai-hint={PlaceHolderImages.find(img => img.id === sale.productImage)?.imageHint}
+                                            />
+                                        ) : (
+                                            <div className="flex h-10 w-10 items-center justify-center rounded-md bg-muted">
+                                                <ShoppingBag className="h-5 w-5 text-muted-foreground" />
+                                            </div>
+                                        )}
+                                        <div>
+                                            <div className="font-medium">{sale.productName}</div>
+                                            <div className="text-sm text-muted-foreground">{sale.productCategory}</div>
+                                        </div>
+                                    </div>
+                                </TableCell>
+                                <TableCell className="hidden md:table-cell">
+                                    <div className="font-medium">{sale.customerName}</div>
+                                    <div className="text-sm text-muted-foreground">{sale.customerPhone}</div>
+                                </TableCell>
+                                <TableCell className="text-center font-mono">{sale.quantitySold}</TableCell>
+                                <TableCell className="text-center">
+                                    <Badge variant="outline" className="font-mono">
+                                        +{sale.totalProfit.toFixed(2)} دج
+                                    </Badge>
+                                </TableCell>
+                                <TableCell className="hidden md:table-cell text-center">{sale.paymentMethod}</TableCell>
+                                <TableCell className="text-right font-mono">{new Date(sale.saleDate).toLocaleDateString()}</TableCell>
+                            </TableRow>
+                        );
+                    })}
                 </TableBody>
                 </Table>
             ) : (
@@ -104,3 +114,5 @@ export default function SalesPage() {
     </>
   );
 }
+
+    
