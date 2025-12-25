@@ -23,10 +23,10 @@ interface Stat {
 }
 
 const titles: { [key: string]: string } = {
-  totalProfit: 'Total Profit',
-  totalRevenue: 'Total Revenue',
-  totalSales: 'Total Sales',
-  bestSellingProduct: 'Best Selling Product',
+  totalProfit: 'إجمالي الربح',
+  totalRevenue: 'إجمالي الإيرادات',
+  totalSales: 'إجمالي المبيعات',
+  bestSellingProduct: 'المنتج الأكثر مبيعًا',
 };
 
 interface weeklyProfitDataType {
