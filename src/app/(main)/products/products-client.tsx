@@ -223,7 +223,7 @@ export function ProductsClient({ products }: ProductsClientProps) {
                 </CardHeader>
                 <CardContent className="text-center">
                     <CardTitle className="font-headline text-2xl">{'No Products Found'}</CardTitle>
-                    <CardDescription className="mt-2">{'You haven\\'t added any products yet. Get started by adding one.'}</CardDescription>
+                    <CardDescription className="mt-2">{"You haven't added any products yet. Get started by adding one."}</CardDescription>
                 </CardContent>
                 <CardFooter>
                     <Button asChild className="mt-4 gap-1">
