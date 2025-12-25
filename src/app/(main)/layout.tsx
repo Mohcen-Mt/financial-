@@ -37,7 +37,7 @@ export default function MainLayout({
         </Sidebar>
         <SidebarInset className="flex flex-col">
           {/* The Header component will be rendered by child pages */}
-          <main className="flex-1 overflow-y-auto" suppressHydrationWarning>
+          <main className="flex-1 overflow-y-auto">
             {children}
           </main>
         </SidebarInset>
