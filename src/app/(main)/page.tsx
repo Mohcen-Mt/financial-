@@ -5,6 +5,7 @@ import { useProducts } from '@/contexts/products-provider';
 import { useSales } from '@/contexts/sales-provider';
 import { DashboardClient } from '@/components/dashboard/dashboard-client';
 import type { Product } from '@/lib/types';
+import { startOfWeek, format } from 'date-fns';
 
 export default function DashboardPage() {
   const { products } = useProducts();
@@ -68,17 +69,33 @@ export default function DashboardPage() {
     },
   ];
 
-  // This can be made dynamic in the future based on sales data
-  const weeklyProfitData = [
-    { week: 'Week 1', profit: 120000 },
-    { week: 'Week 2', profit: 180000 },
-    { week: 'Week 3', profit: 150000 },
-    { week: 'Week 4', profit: 210000 },
-  ];
+  const weeklyProfitData = sales.reduce((acc, sale) => {
+    const saleDate = new Date(sale.saleDate);
+    // Use Monday as the start of the week
+    const weekStart = startOfWeek(saleDate, { weekStartsOn: 1 });
+    const weekKey = format(weekStart, 'yyyy-MM-dd');
+
+    if (!acc[weekKey]) {
+      acc[weekKey] = { week: `Week of ${format(weekStart, 'MMM d')}`, profit: 0 };
+    }
+    acc[weekKey].profit += sale.totalProfit;
+    return acc;
+  }, {} as Record<string, { week: string, profit: number }>);
+
+  const chartData = Object.values(weeklyProfitData).sort((a, b) => {
+    // Extract date from "Week of MMM d" string to sort correctly
+    const dateA = new Date(a.week.replace('Week of ', ''));
+    const dateB = new Date(b.week.replace('Week of ', ''));
+    // Set a common year to avoid issues with year changes if data spans across years
+    dateA.setFullYear(2000);
+    dateB.setFullYear(2000);
+    return dateA.getTime() - dateB.getTime();
+  });
+
 
   const recentProducts = products.sort((a,b) => new Date(b.addedDate).getTime() - new Date(a.addedDate).getTime()).slice(0, 5);
 
   return (
-    <DashboardClient stats={stats} weeklyProfitData={weeklyProfitData} recentProducts={recentProducts} />
+    <DashboardClient stats={stats} weeklyProfitData={chartData} recentProducts={recentProducts} />
   );
 }
