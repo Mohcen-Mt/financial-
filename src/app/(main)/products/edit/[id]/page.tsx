@@ -87,17 +87,17 @@ export default function EditProductPage() {
 
   if (!product) {
     return (
-      <>
+      <div suppressHydrationWarning>
         <Header title={'Edit Product'} />
         <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
             <p>Product not found.</p>
         </div>
-      </>
+      </div>
     );
   }
 
   return (
-    <>
+    <div suppressHydrationWarning>
       <Header title={'Edit Product'} />
       <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
         <div className="flex items-center gap-4">
@@ -272,6 +272,6 @@ export default function EditProductPage() {
           </CardContent>
         </Card>
       </div>
-    </>
+    </div>
   );
 }

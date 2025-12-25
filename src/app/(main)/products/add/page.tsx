@@ -77,7 +77,7 @@ export default function AddProductPage() {
   const selectedImage = PlaceHolderImages.find(p => p.id === imageId);
 
   return (
-    <>
+    <div suppressHydrationWarning>
       <Header title={'Add Product'} />
       <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
         <div className="flex items-center gap-4">
@@ -253,6 +253,6 @@ export default function AddProductPage() {
           </CardContent>
         </Card>
       </div>
-    </>
+    </div>
   );
 }
