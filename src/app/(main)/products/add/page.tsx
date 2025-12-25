@@ -40,8 +40,8 @@ export default function AddProductPage() {
     defaultValues: {
       name: '',
       category: 'T-shirt',
-      buyPrice: 10,
-      sellPrice: 25,
+      buyPrice: 1000,
+      sellPrice: 2500,
       quantity: 50,
       color: '',
       size: 'M',
@@ -133,7 +133,7 @@ export default function AddProductPage() {
                         <FormItem>
                           <FormLabel>{'Buy Price'}</FormLabel>
                           <FormControl>
-                            <Input type="number" placeholder="10" {...field} />
+                            <Input type="number" placeholder="1000" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -146,7 +146,7 @@ export default function AddProductPage() {
                         <FormItem>
                           <FormLabel>{'Sell Price'}</FormLabel>
                           <FormControl>
-                            <Input type="number" placeholder="25" {...field} />
+                            <Input type="number" placeholder="2500" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -170,7 +170,7 @@ export default function AddProductPage() {
                             <CardContent className="p-3 text-center">
                                 <p className="text-sm text-muted-foreground">{'Calculated Profit'}</p>
                                 <p className={`font-headline text-2xl font-bold ${profit >= 0 ? 'text-primary' : 'text-destructive'}`}>
-                                    ${profit.toFixed(2)}
+                                    {profit.toFixed(2)} دج
                                 </p>
                             </CardContent>
                         </Card>

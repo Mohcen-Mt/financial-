@@ -33,12 +33,12 @@ export function ProfitChart({ data }: ProfitChartProps) {
               tickFormatter={(value) => value.slice(0, 6)}
             />
             <YAxis
-                tickFormatter={(value) => `$${value / 1000}k`}
+                tickFormatter={(value) => `${value / 1000}K دج`}
                 tickLine={false}
                 axisLine={false}
                 tickMargin={10}
              />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent formatter={(value) => `${new Intl.NumberFormat('fr-DZ').format(value as number)} دج`} />} />
             <Bar dataKey="profit" fill="var(--color-profit)" radius={8} />
           </BarChart>
         </ChartContainer>

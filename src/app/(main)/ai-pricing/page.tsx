@@ -41,13 +41,13 @@ export default function AiPricingPage() {
     defaultValues: {
       productName: '',
       category: 'T-shirt',
-      buyPrice: 10,
-      sellPrice: 25,
+      buyPrice: 1000,
+      sellPrice: 2500,
       quantity: 100,
       color: 'Black',
       size: 'M',
       profitMargin: 0.6,
-      pastSalesData: 'Sold 20 units last month at $25. Similar products are popular.',
+      pastSalesData: 'Sold 20 units last month at 2500 DZD. Similar products are popular.',
     },
   });
 
@@ -121,7 +121,7 @@ export default function AiPricingPage() {
                       <FormItem>
                         <FormLabel>{'Buy Price'}</FormLabel>
                         <FormControl>
-                          <Input type="number" placeholder="10" {...field} />
+                          <Input type="number" placeholder="1000" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -134,7 +134,7 @@ export default function AiPricingPage() {
                       <FormItem>
                         <FormLabel>{'Sell Price'}</FormLabel>
                         <FormControl>
-                          <Input type="number" placeholder="25" {...field} />
+                          <Input type="number" placeholder="2500" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -223,7 +223,7 @@ export default function AiPricingPage() {
                     <Alert>
                         <DollarSign className="h-4 w-4" />
                         <AlertTitle>{'Suggested Price'}</AlertTitle>
-                        <AlertDescription className="font-headline text-lg font-bold text-primary">${suggestions.suggestedPrice.toFixed(2)}</AlertDescription>
+                        <AlertDescription className="font-headline text-lg font-bold text-primary">{suggestions.suggestedPrice.toFixed(2)} DZD</AlertDescription>
                     </Alert>
                     <Alert>
                         <TrendingUp className="h-4 w-4" />

@@ -155,7 +155,7 @@ export default function EditProductPage() {
                         <FormItem>
                           <FormLabel>{'Buy Price'}</FormLabel>
                           <FormControl>
-                            <Input type="number" placeholder="10" {...field} />
+                            <Input type="number" placeholder="1000" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -168,7 +168,7 @@ export default function EditProductPage() {
                         <FormItem>
                           <FormLabel>{'Sell Price'}</FormLabel>
                           <FormControl>
-                            <Input type="number" placeholder="25" {...field} />
+                            <Input type="number" placeholder="2500" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -179,8 +179,7 @@ export default function EditProductPage() {
                       name="quantity"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{'Quantity'}</FormLabel>
-                          <FormControl>
+                          <FormLabel>{'Quantity'}</FormLabel>                          <FormControl>
                             <Input type="number" placeholder="100" {...field} />
                           </FormControl>
                           <FormMessage />
@@ -192,7 +191,7 @@ export default function EditProductPage() {
                             <CardContent className="p-3 text-center">
                                 <p className="text-sm text-muted-foreground">{'Calculated Profit'}</p>
                                 <p className={`font-headline text-2xl font-bold ${profit >= 0 ? 'text-primary' : 'text-destructive'}`}>
-                                    ${profit.toFixed(2)}
+                                    {profit.toFixed(2)} دج
                                 </p>
                             </CardContent>
                         </Card>

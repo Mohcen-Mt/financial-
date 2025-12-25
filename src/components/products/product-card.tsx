@@ -19,14 +19,12 @@ import type { ReactNode } from 'react';
 
 interface ProductCardProps {
   product: Product;
-  onEdit: () => void;
-  onSell: () => void;
   children: ReactNode;
 }
 
 const LOW_STOCK_THRESHOLD = 20;
 
-export function ProductCard({ product, onEdit, onSell, children }: ProductCardProps) {
+export function ProductCard({ product, children }: ProductCardProps) {
   const getProductImage = (imageId: string) => {
     return PlaceHolderImages.find((img) => img.id === imageId)?.imageUrl || '';
   };
@@ -64,11 +62,11 @@ export function ProductCard({ product, onEdit, onSell, children }: ProductCardPr
         <div className="mt-4 grid grid-cols-3 gap-4 text-center text-sm">
             <div>
                 <p className="text-xs text-muted-foreground">{'Sell Price'}</p>
-                <p className="font-semibold font-mono">${product.sellPrice.toFixed(2)}</p>
+                <p className="font-semibold font-mono">{product.sellPrice.toFixed(2)} دج</p>
             </div>
             <div>
                 <p className="text-xs text-muted-foreground">{'Profit'}</p>
-                <p className="font-semibold text-primary font-mono">+${product.profit.toFixed(2)}</p>
+                <p className="font-semibold text-primary font-mono">+{product.profit.toFixed(2)} دج</p>
             </div>
             <div>
                 <p className="text-xs text-muted-foreground">{'Quantity'}</p>

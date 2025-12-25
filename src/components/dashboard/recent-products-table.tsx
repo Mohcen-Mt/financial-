@@ -66,7 +66,7 @@ export function RecentProductsTable({ products }: RecentProductsTableProps) {
                     </TableCell>
                     <TableCell className="text-center">
                     <Badge variant="outline" className="font-mono">
-                        +${product.profit.toFixed(2)}
+                        +{product.profit.toFixed(2)} دج
                     </Badge>
                     </TableCell>
                 </TableRow>

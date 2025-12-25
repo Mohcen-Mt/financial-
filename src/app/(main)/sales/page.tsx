@@ -80,7 +80,7 @@ export default function SalesPage() {
                         <TableCell className="text-center font-mono">{sale.quantitySold}</TableCell>
                         <TableCell className="text-center">
                             <Badge variant="outline" className="font-mono">
-                                +${sale.totalProfit.toFixed(2)}
+                                +{sale.totalProfit.toFixed(2)} دج
                             </Badge>
                         </TableCell>
                         <TableCell className="hidden md:table-cell text-center">{sale.paymentMethod}</TableCell>
