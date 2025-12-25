@@ -1,5 +1,5 @@
 
-import type { Product } from './types';
+import type { Product, Sale } from './types';
 
 export const mockProducts: Product[] = [
   {
@@ -80,6 +80,29 @@ export const mockProducts: Product[] = [
     profit: 23,
     addedDate: '2024-05-09',
   },
+];
+
+export const mockSales: Sale[] = [
+    {
+      id: 'sale-001',
+      productId: 'prod-001',
+      quantitySold: 2,
+      customerName: 'Alice',
+      customerPhone: '111-222-3333',
+      paymentMethod: 'Card',
+      saleDate: '2024-05-21T10:00:00.000Z',
+      totalProfit: 24,
+    },
+    {
+      id: 'sale-002',
+      productId: 'prod-002',
+      quantitySold: 1,
+      customerName: 'Bob',
+      customerPhone: '444-555-6666',
+      paymentMethod: 'Cash',
+      saleDate: '2024-05-21T12:30:00.000Z',
+      totalProfit: 30,
+    },
 ];
 
 export const weeklyProfitData = [

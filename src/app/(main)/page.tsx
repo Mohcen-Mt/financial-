@@ -2,33 +2,31 @@
 'use client';
 
 import { useProducts } from '@/contexts/products-provider';
+import { useSales } from '@/contexts/sales-provider';
 import { DashboardClient } from '@/components/dashboard/dashboard-client';
 
 export default function DashboardPage() {
   const { products } = useProducts();
+  const { sales } = useSales();
 
-  // Assuming initial stock was 250 for each product to calculate sales
-  const INITIAL_STOCK = 250;
-
-  const totalRevenue = products.reduce((acc, p) => {
-    const soldQuantity = Math.max(0, INITIAL_STOCK - p.quantity);
-    return acc + (soldQuantity * p.sellPrice);
+  const totalRevenue = sales.reduce((acc, sale) => {
+      const product = products.find(p => p.id === sale.productId);
+      if (!product) return acc;
+      return acc + (sale.quantitySold * product.sellPrice);
   }, 0);
   
-  const totalProfit = products.reduce((acc, p) => {
-      const soldQuantity = Math.max(0, INITIAL_STOCK - p.quantity);
-      return acc + (soldQuantity * p.profit);
-  }, 0);
+  const totalProfit = sales.reduce((acc, sale) => acc + sale.totalProfit, 0);
   
-  const totalSales = products.reduce((acc, p) => acc + Math.max(0, INITIAL_STOCK - p.quantity), 0);
+  const totalSales = sales.reduce((acc, sale) => acc + sale.quantitySold, 0);
 
-  const bestSellingProduct = products.length > 0 ? [...products].sort((a, b) => {
-    const profitA = Math.max(0, INITIAL_STOCK - a.quantity) * a.profit;
-    const profitB = Math.max(0, INITIAL_STOCK - b.quantity) * b.profit;
-    return profitB - profitA;
-  })[0] : { name: 'N/A', profit: 0 };
+  const bestSellingProductProfitMap = new Map<string, number>();
+  sales.forEach(sale => {
+    bestSellingProductProfitMap.set(sale.productId, (bestSellingProductProfitMap.get(sale.productId) || 0) + sale.totalProfit);
+  });
   
-  const bestSellingProductProfit = products.length > 0 ? (Math.max(0, INITIAL_STOCK - bestSellingProduct.quantity) * bestSellingProduct.profit) : 0;
+  const bestSellingProductId = [...bestSellingProductProfitMap.entries()].sort((a, b) => b[1] - a[1])[0]?.[0];
+  const bestSellingProduct = products.find(p => p.id === bestSellingProductId);
+  const bestSellingProductProfit = bestSellingProduct ? bestSellingProductProfitMap.get(bestSellingProduct.id) || 0 : 0;
 
 
   const stats = [
@@ -52,7 +50,7 @@ export default function DashboardPage() {
     },
     {
       titleKey: 'bestSellingProduct',
-      value: bestSellingProduct.name,
+      value: bestSellingProduct?.name || 'N/A',
       icon: 'TrendingUp',
       change: `Profit: $${bestSellingProductProfit.toFixed(2)}`,
     },
@@ -66,7 +64,9 @@ export default function DashboardPage() {
     { week: 'Week 4', profit: 2100 },
   ];
 
+  const recentProducts = products.sort((a,b) => new Date(b.addedDate).getTime() - new Date(a.addedDate).getTime()).slice(0, 5);
+
   return (
-    <DashboardClient stats={stats} weeklyProfitData={weeklyProfitData} recentProducts={products.slice(0, 5)} />
+    <DashboardClient stats={stats} weeklyProfitData={weeklyProfitData} recentProducts={recentProducts} />
   );
 }

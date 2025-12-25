@@ -12,6 +12,7 @@ import {
   Edit,
   Trash2,
   Package,
+  ShoppingBag,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
@@ -38,6 +39,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
@@ -48,6 +50,7 @@ import { ProductCard } from '@/components/products/product-card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { useProducts } from '@/contexts/products-provider';
 import { useToast } from '@/hooks/use-toast';
+import { SellProductDialog } from '@/components/products/sell-product-dialog';
 
 const LOW_STOCK_THRESHOLD = 20;
 
@@ -58,6 +61,8 @@ export function ProductsClient() {
   const { products, deleteProduct } = useProducts();
   const { toast } = useToast();
   const router = useRouter();
+
+  const [productToSell, setProductToSell] = useState<Product | null>(null);
 
 
   const categories = useMemo(() => {
@@ -101,6 +106,11 @@ export function ProductsClient() {
             </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setProductToSell(product)}>
+                <ShoppingBag className="me-2 h-4 w-4" />
+                <span>{'Sell'}</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => handleEdit(product.id)}>
                 <Edit className="me-2 h-4 w-4" />
                 <span>{'Edit'}</span>
@@ -190,7 +200,13 @@ export function ProductsClient() {
           viewMode === 'grid' ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} onEdit={() => handleEdit(product.id)} onDelete={() => handleDelete(product.id, product.name)} />
+                <ProductCard 
+                    key={product.id} 
+                    product={product} 
+                    onEdit={() => handleEdit(product.id)} 
+                    onDelete={() => handleDelete(product.id, product.name)}
+                    onSell={() => setProductToSell(product)}
+                />
               ))}
             </div>
           ) : (
@@ -273,6 +289,16 @@ export function ProductsClient() {
             </Card>
         )}
       </div>
+      {productToSell && (
+        <SellProductDialog
+          product={productToSell}
+          onOpenChange={(isOpen) => {
+            if (!isOpen) {
+              setProductToSell(null);
+            }
+          }}
+        />
+      )}
     </>
   );
 }

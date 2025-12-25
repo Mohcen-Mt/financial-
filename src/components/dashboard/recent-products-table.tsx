@@ -26,7 +26,7 @@ export function RecentProductsTable({ products }: RecentProductsTableProps) {
         <div className="grid gap-2">
           <CardTitle className="font-headline">{'Recent Products'}</CardTitle>
           <CardDescription>
-            You have {products.length} recent products.
+            Your most recently added products.
           </CardDescription>
         </div>
         <Button asChild size="sm" className="ms-auto gap-1">
@@ -37,41 +37,45 @@ export function RecentProductsTable({ products }: RecentProductsTableProps) {
         </Button>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{'Product Name'}</TableHead>
-              <TableHead className="text-center">{'Profit'}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {products.map((product) => (
-              <TableRow key={product.id}>
-                <TableCell>
-                  <div className="flex items-center gap-4">
-                    <Image
-                      src={getProductImage(product.image)}
-                      alt={product.name}
-                      width={40}
-                      height={40}
-                      className="rounded-md object-cover"
-                      data-ai-hint={PlaceHolderImages.find(img => img.id === product.image)?.imageHint}
-                    />
-                    <div>
-                      <div className="font-medium">{product.name}</div>
-                      <div className="text-sm text-muted-foreground">{product.category}</div>
+        {products.length > 0 ? (
+            <Table>
+            <TableHeader>
+                <TableRow>
+                <TableHead>{'Product Name'}</TableHead>
+                <TableHead className="text-center">{'Profit'}</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {products.map((product) => (
+                <TableRow key={product.id}>
+                    <TableCell>
+                    <div className="flex items-center gap-4">
+                        <Image
+                        src={getProductImage(product.image)}
+                        alt={product.name}
+                        width={40}
+                        height={40}
+                        className="rounded-md object-cover"
+                        data-ai-hint={PlaceHolderImages.find(img => img.id === product.image)?.imageHint}
+                        />
+                        <div>
+                        <div className="font-medium">{product.name}</div>
+                        <div className="text-sm text-muted-foreground">{product.category}</div>
+                        </div>
                     </div>
-                  </div>
-                </TableCell>
-                <TableCell className="text-center">
-                  <Badge variant="outline" className="font-mono">
-                    +${product.profit.toFixed(2)}
-                  </Badge>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                    </TableCell>
+                    <TableCell className="text-center">
+                    <Badge variant="outline" className="font-mono">
+                        +${product.profit.toFixed(2)}
+                    </Badge>
+                    </TableCell>
+                </TableRow>
+                ))}
+            </TableBody>
+            </Table>
+        ) : (
+            <p className="text-sm text-muted-foreground text-center py-8">No recent products.</p>
+        )}
       </CardContent>
     </Card>
   );

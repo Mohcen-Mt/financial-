@@ -3,6 +3,7 @@
 
 import { MainLayoutClient } from './main-layout-client';
 import { ProductsProvider } from '@/contexts/products-provider';
+import { SalesProvider } from '@/contexts/sales-provider';
 
 export default function MainLayout({
   children,
@@ -11,7 +12,9 @@ export default function MainLayout({
 }) {
   return (
       <ProductsProvider>
-        <MainLayoutClient>{children}</MainLayoutClient>
+        <SalesProvider>
+            <MainLayoutClient>{children}</MainLayoutClient>
+        </SalesProvider>
       </ProductsProvider>
   );
 }
