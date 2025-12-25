@@ -1,4 +1,3 @@
-
 'use client';
 import { Header } from "@/components/layout/header";
 import { StatCard } from "@/components/dashboard/stat-card";
@@ -23,10 +22,10 @@ interface Stat {
 }
 
 const titles: { [key: string]: string } = {
-  totalProfit: 'إجمالي الربح',
-  totalRevenue: 'إجمالي الإيرادات',
-  totalSales: 'إجمالي المبيعات',
-  bestSellingProduct: 'المنتج الأكثر مبيعًا',
+  totalProfit: 'Total Profit',
+  totalRevenue: 'Total Revenue',
+  totalSales: 'Total Sales',
+  bestSellingProduct: 'Best Selling Product',
 };
 
 interface weeklyProfitDataType {
@@ -42,9 +41,9 @@ interface DashboardClientProps {
 
 export function DashboardClient({ stats, weeklyProfitData, recentProducts }: DashboardClientProps) {
   return (
-    <>
+    <div suppressHydrationWarning>
       <Header title={'Dashboard'} />
-      <div className="flex-1 space-y-4 p-4 pt-6 md:p-8" suppressHydrationWarning>
+      <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (
             <StatCard
@@ -61,6 +60,6 @@ export function DashboardClient({ stats, weeklyProfitData, recentProducts }: Das
           <RecentProductsTable products={recentProducts} />
         </div>
       </div>
-    </>
+    </div>
   );
 }
