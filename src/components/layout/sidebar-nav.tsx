@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BrainCircuit, FileDown, LayoutDashboard, LineChart, Package, ShoppingCart } from 'lucide-react';
+import { BrainCircuit, LayoutDashboard, Package } from 'lucide-react';
 import {
   SidebarMenu,
   SidebarMenuItem,
@@ -18,10 +18,7 @@ export function SidebarNav() {
   const menuItems = [
     { href: '/', label: t('dashboard'), icon: LayoutDashboard },
     { href: '/products', label: t('products'), icon: Package },
-    { href: '/sales', label: t('sales'), icon: ShoppingCart },
-    { href: '/analytics', label: t('analytics'), icon: LineChart },
     { href: '/ai-pricing', label: t('aiPricing'), icon: BrainCircuit },
-    { href: '/export', label: t('export'), icon: FileDown },
   ];
 
   return (
