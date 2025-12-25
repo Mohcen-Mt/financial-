@@ -11,7 +11,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { SidebarNav } from '@/components/layout/sidebar-nav';
 import { Flame } from 'lucide-react';
-import { Providers } from '@/contexts/providers';
 
 export default function MainLayout({
   children,
@@ -19,8 +18,7 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Providers>
-       <div suppressHydrationWarning>
+      <div suppressHydrationWarning>
         <Sidebar side="left" collapsible="icon">
           <SidebarHeader>
             <Button variant="ghost" className="h-12 justify-start gap-3 px-3 font-headline text-lg">
@@ -42,6 +40,5 @@ export default function MainLayout({
           </main>
         </SidebarInset>
       </div>
-    </Providers>
   );
 }
