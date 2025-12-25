@@ -11,8 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Languages, LogOut, User } from 'lucide-react';
-import { useTranslation } from '@/hooks/use-translation';
+import { LogOut, User } from 'lucide-react';
 import { SidebarTrigger } from '../ui/sidebar';
 
 type HeaderProps = {
@@ -20,7 +19,6 @@ type HeaderProps = {
 };
 
 export function Header({ title }: HeaderProps) {
-  const { t, language, toggleLanguage } = useTranslation();
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
@@ -29,24 +27,6 @@ export function Header({ title }: HeaderProps) {
         <h1 className="font-headline text-xl font-semibold md:text-2xl">{title}</h1>
       </div>
       <div className="ms-auto flex items-center gap-4">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon">
-              <Languages className="h-[1.2rem] w-[1.2rem]" />
-              <span className="sr-only">{t('language')}</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>{t('language')}</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => language === 'ar' && toggleLanguage()}>
-              {t('english')}
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => language === 'en' && toggleLanguage()}>
-              {t('arabic')}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">

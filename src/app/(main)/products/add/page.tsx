@@ -6,11 +6,10 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Upload, PlusCircle } from 'lucide-react';
+import { ArrowLeft, Upload } from 'lucide-react';
 
-import { useTranslation } from '@/hooks/use-translation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -30,7 +29,6 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function AddProductPage() {
-  const { t } = useTranslation();
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -61,7 +59,7 @@ export default function AddProductPage() {
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     toast({
-        title: t('productAdded'),
+        title: 'Product Added',
         description: data.name,
     });
 
@@ -71,7 +69,7 @@ export default function AddProductPage() {
 
   return (
     <>
-      <Header title={t('addProduct')} />
+      <Header title={'Add Product'} />
       <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
         <div className="flex items-center gap-4">
             <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => router.back()}>
@@ -79,13 +77,13 @@ export default function AddProductPage() {
                 <span className="sr-only">Back</span>
             </Button>
             <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                {t('addNewProduct')}
+                {'Add New Product'}
             </h1>
         </div>
         <Card className="glassmorphic">
           <CardHeader>
-            <CardTitle className="font-headline">{t('productDetails')}</CardTitle>
-            <CardDescription>{t('productDetailsDesc')}</CardDescription>
+            <CardTitle className="font-headline">{'Product Details'}</CardTitle>
+            <CardDescription>{'Fill in the information about your new product.'}</CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -97,9 +95,9 @@ export default function AddProductPage() {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t('productName')}</FormLabel>
+                          <FormLabel>{'Product Name'}</FormLabel>
                           <FormControl>
-                            <Input placeholder={t('productNamePlaceholder')} {...field} />
+                            <Input placeholder={'e.g., Cool Summer T-Shirt'} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -110,11 +108,11 @@ export default function AddProductPage() {
                       name="category"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t('category')}</FormLabel>
+                          <FormLabel>{'Category'}</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder={t('selectCategory')} />
+                                <SelectValue placeholder={'Select a category'} />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -132,7 +130,7 @@ export default function AddProductPage() {
                       name="buyPrice"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t('buyPrice')}</FormLabel>
+                          <FormLabel>{'Buy Price'}</FormLabel>
                           <FormControl>
                             <Input type="number" placeholder="10" {...field} />
                           </FormControl>
@@ -145,7 +143,7 @@ export default function AddProductPage() {
                       name="sellPrice"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t('sellPrice')}</FormLabel>
+                          <FormLabel>{'Sell Price'}</FormLabel>
                           <FormControl>
                             <Input type="number" placeholder="25" {...field} />
                           </FormControl>
@@ -158,7 +156,7 @@ export default function AddProductPage() {
                       name="quantity"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t('quantity')}</FormLabel>
+                          <FormLabel>{'Quantity'}</FormLabel>
                           <FormControl>
                             <Input type="number" placeholder="100" {...field} />
                           </FormControl>
@@ -169,7 +167,7 @@ export default function AddProductPage() {
                      <div className="flex h-full items-end">
                         <Card className="w-full bg-muted/50">
                             <CardContent className="p-3 text-center">
-                                <p className="text-sm text-muted-foreground">{t('calculatedProfit')}</p>
+                                <p className="text-sm text-muted-foreground">{'Calculated Profit'}</p>
                                 <p className={`font-headline text-2xl font-bold ${profit >= 0 ? 'text-primary' : 'text-destructive'}`}>
                                     ${profit.toFixed(2)}
                                 </p>
@@ -181,7 +179,7 @@ export default function AddProductPage() {
                       name="color"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t('color')}</FormLabel>
+                          <FormLabel>{'Color'}</FormLabel>
                           <FormControl>
                             <Input placeholder="e.g., Black" {...field} />
                           </FormControl>
@@ -194,7 +192,7 @@ export default function AddProductPage() {
                       name="size"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t('size')}</FormLabel>
+                          <FormLabel>{'Size'}</FormLabel>
                           <FormControl>
                             <Input placeholder="e.g., M, L, 32" {...field} />
                           </FormControl>
@@ -204,12 +202,12 @@ export default function AddProductPage() {
                     />
                   </div>
                   <div className="md:col-span-1">
-                    <FormLabel>{t('productImage')}</FormLabel>
+                    <FormLabel>{'Product Image'}</FormLabel>
                     <Card className="mt-2 flex aspect-square w-full items-center justify-center border-2 border-dashed">
                         <div className="text-center">
                             <Upload className="mx-auto h-12 w-12 text-muted-foreground" />
-                            <p className="mt-2 text-sm text-muted-foreground">{t('uploadImageText')}</p>
-                            <Button variant="ghost" className="mt-2" type="button">{t('selectFile')}</Button>
+                            <p className="mt-2 text-sm text-muted-foreground">{'Drag & drop or click to upload'}</p>
+                            <Button variant="ghost" className="mt-2" type="button">{'Select File'}</Button>
                         </div>
                     </Card>
                   </div>
@@ -217,10 +215,10 @@ export default function AddProductPage() {
 
                 <div className="flex justify-end gap-2">
                     <Button type="button" variant="outline" onClick={() => router.back()}>
-                        {t('cancel')}
+                        {'Cancel'}
                     </Button>
                     <Button type="submit" disabled={isLoading}>
-                        {isLoading ? t('saving') : t('saveProduct')}
+                        {isLoading ? 'Saving...' : 'Save Product'}
                     </Button>
                 </div>
               </form>

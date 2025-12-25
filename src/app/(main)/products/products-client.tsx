@@ -15,7 +15,6 @@ import {
 } from 'lucide-react';
 
 import type { Product } from '@/lib/types';
-import { useTranslation } from '@/hooks/use-translation';
 import { Header } from '@/components/layout/header';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -53,7 +52,6 @@ interface ProductsClientProps {
 const LOW_STOCK_THRESHOLD = 20;
 
 export function ProductsClient({ products }: ProductsClientProps) {
-  const { t, language } = useTranslation();
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -65,12 +63,12 @@ export function ProductsClient({ products }: ProductsClientProps) {
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
-      const name = language === 'ar' ? (product as any).nameAr : product.name;
+      const name = product.name;
       const matchesSearch = name.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = categoryFilter === 'all' || product.category === categoryFilter;
       return matchesSearch && matchesCategory;
     });
-  }, [products, searchTerm, categoryFilter, language]);
+  }, [products, searchTerm, categoryFilter]);
     
   const getProductImage = (imageId: string) => {
     return PlaceHolderImages.find((img) => img.id === imageId)?.imageUrl || '';
@@ -78,24 +76,24 @@ export function ProductsClient({ products }: ProductsClientProps) {
 
   return (
     <>
-      <Header title={t('products')} />
+      <Header title={'Products'} />
       <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="flex flex-col gap-4 md:flex-row md:gap-2">
                 <Input
-                placeholder={t('filterByName')}
+                placeholder={'Filter by name...'}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="h-9 w-full md:w-[250px]"
                 />
                 <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                 <SelectTrigger className="h-9 w-full md:w-[180px]">
-                    <SelectValue placeholder={t('filterByCategory')} />
+                    <SelectValue placeholder={'Filter by category...'} />
                 </SelectTrigger>
                 <SelectContent>
                     {categories.map((cat) => (
                     <SelectItem key={cat} value={cat}>
-                        {cat === 'all' ? t('allCategories') : cat}
+                        {cat === 'all' ? 'All Categories' : cat}
                     </SelectItem>
                     ))}
                 </SelectContent>
@@ -109,7 +107,7 @@ export function ProductsClient({ products }: ProductsClientProps) {
                     size="icon"
                     className="h-7 w-7"
                     onClick={() => setViewMode('grid')}
-                    aria-label={t('gridView')}
+                    aria-label={'Grid View'}
                 >
                     <LayoutGrid className="h-4 w-4" />
                 </Button>
@@ -118,7 +116,7 @@ export function ProductsClient({ products }: ProductsClientProps) {
                     size="icon"
                     className="h-7 w-7"
                     onClick={() => setViewMode('table')}
-                    aria-label={t('tableView')}
+                    aria-label={'Table View'}
                 >
                     <List className="h-4 w-4" />
                 </Button>
@@ -127,7 +125,7 @@ export function ProductsClient({ products }: ProductsClientProps) {
                     <Link href="/products/add">
                         <PlusCircle className="h-3.5 w-3.5" />
                         <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                            {t('addProduct')}
+                            {'Add Product'}
                         </span>
                     </Link>
                 </Button>
@@ -147,14 +145,14 @@ export function ProductsClient({ products }: ProductsClientProps) {
                     <Table>
                         <TableHeader>
                         <TableRow>
-                            <TableHead>{t('productName')}</TableHead>
-                            <TableHead className="hidden md:table-cell">{t('category')}</TableHead>
-                            <TableHead className="text-center">{t('sellPrice')}</TableHead>
-                            <TableHead className="text-center">{t('profit')}</TableHead>
-                            <TableHead className="text-center">{t('quantity')}</TableHead>
-                            <TableHead className="hidden md:table-cell text-center">{t('addedDate')}</TableHead>
+                            <TableHead>{'Product Name'}</TableHead>
+                            <TableHead className="hidden md:table-cell">{'Category'}</TableHead>
+                            <TableHead className="text-center">{'Sell Price'}</TableHead>
+                            <TableHead className="text-center">{'Profit'}</TableHead>
+                            <TableHead className="text-center">{'Quantity'}</TableHead>
+                            <TableHead className="hidden md:table-cell text-center">{'Added Date'}</TableHead>
                             <TableHead>
-                            <span className="sr-only">{t('actions')}</span>
+                            <span className="sr-only">{'Actions'}</span>
                             </TableHead>
                         </TableRow>
                         </TableHeader>
@@ -174,8 +172,8 @@ export function ProductsClient({ products }: ProductsClientProps) {
                                         data-ai-hint={PlaceHolderImages.find(img => img.id === product.image)?.imageHint}
                                         />
                                         <div>
-                                        <div className="font-medium">{language === 'ar' ? (product as any).nameAr : product.name}</div>
-                                        {isLowStock && <Badge variant="destructive" className="mt-1">{t('lowStock')}</Badge>}
+                                        <div className="font-medium">{product.name}</div>
+                                        {isLowStock && <Badge variant="destructive" className="mt-1">{'Low Stock'}</Badge>}
                                         </div>
                                     </div>
                                 </TableCell>
@@ -199,11 +197,11 @@ export function ProductsClient({ products }: ProductsClientProps) {
                                     <DropdownMenuContent align="end">
                                         <DropdownMenuItem>
                                             <Edit className="me-2 h-4 w-4" />
-                                            <span>{t('edit')}</span>
+                                            <span>{'Edit'}</span>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive">
                                             <Trash2 className="me-2 h-4 w-4" />
-                                            <span>{t('delete')}</span>
+                                            <span>{'Delete'}</span>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                     </DropdownMenu>
@@ -224,14 +222,14 @@ export function ProductsClient({ products }: ProductsClientProps) {
                     </div>
                 </CardHeader>
                 <CardContent className="text-center">
-                    <CardTitle className="font-headline text-2xl">{t('noProductsFound')}</CardTitle>
-                    <CardDescription className="mt-2">{t('noProductsFoundDesc')}</CardDescription>
+                    <CardTitle className="font-headline text-2xl">{'No Products Found'}</CardTitle>
+                    <CardDescription className="mt-2">{'You haven\\'t added any products yet. Get started by adding one.'}</CardDescription>
                 </CardContent>
                 <CardFooter>
                     <Button asChild className="mt-4 gap-1">
                         <Link href="/products/add">
                             <PlusCircle className="h-3.5 w-3.5" />
-                            {t('addProduct')}
+                            {'Add Product'}
                         </Link>
                     </Button>
                 </CardFooter>

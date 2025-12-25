@@ -5,7 +5,6 @@ export const mockProducts: Product[] = [
   {
     id: 'prod-001',
     name: 'Classic Black Tee',
-    nameAr: 'تيشيرت أسود كلاسيكي',
     category: 'T-shirt',
     buyPrice: 8,
     sellPrice: 20,
@@ -19,7 +18,6 @@ export const mockProducts: Product[] = [
   {
     id: 'prod-002',
     name: 'Comfy Blue Hoodie',
-    nameAr: 'هودي أزرق مريح',
     category: 'Hoodie',
     buyPrice: 25,
     sellPrice: 55,
@@ -33,7 +31,6 @@ export const mockProducts: Product[] = [
   {
     id: 'prod-003',
     name: 'Slim Fit Gray Pants',
-    nameAr: 'بنطلون رمادي ضيق',
     category: 'Pants',
     buyPrice: 30,
     sellPrice: 60,
@@ -47,7 +44,6 @@ export const mockProducts: Product[] = [
   {
     id: 'prod-004',
     name: 'Plain White Tee',
-    nameAr: 'تيشيرت أبيض سادة',
     category: 'T-shirt',
     buyPrice: 7,
     sellPrice: 18,
@@ -61,7 +57,6 @@ export const mockProducts: Product[] = [
   {
     id: 'prod-005',
     name: 'Street Style Red Hoodie',
-    nameAr: 'هودي أحمر ستايل شوارع',
     category: 'Hoodie',
     buyPrice: 28,
     sellPrice: 65,
@@ -75,7 +70,6 @@ export const mockProducts: Product[] = [
   {
     id: 'prod-006',
     name: 'Everyday Black Pants',
-    nameAr: 'بنطلون أسود يومي',
     category: 'Pants',
     buyPrice: 22,
     sellPrice: 45,

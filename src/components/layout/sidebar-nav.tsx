@@ -9,16 +9,14 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from '@/components/ui/sidebar';
-import { useTranslation } from '@/hooks/use-translation';
 
 export function SidebarNav() {
   const pathname = usePathname();
-  const { t } = useTranslation();
 
   const menuItems = [
-    { href: '/', label: t('dashboard'), icon: LayoutDashboard },
-    { href: '/products', label: t('products'), icon: Package },
-    { href: '/ai-pricing', label: t('aiPricing'), icon: BrainCircuit },
+    { href: '/', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/products', label: 'Products', icon: Package },
+    { href: '/ai-pricing', label: 'AI Pricing', icon: BrainCircuit },
   ];
 
   return (

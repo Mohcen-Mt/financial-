@@ -4,7 +4,6 @@ import type { PlaceHolderImages } from './placeholder-images';
 export type Product = {
   id: string;
   name: string;
-  nameAr?: string;
   category: 'T-shirt' | 'Hoodie' | 'Pants';
   buyPrice: number;
   sellPrice: number;

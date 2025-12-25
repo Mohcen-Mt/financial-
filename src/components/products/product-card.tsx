@@ -12,7 +12,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useTranslation } from '@/hooks/use-translation';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { Product } from '@/lib/types';
 
@@ -23,8 +22,6 @@ interface ProductCardProps {
 const LOW_STOCK_THRESHOLD = 20;
 
 export function ProductCard({ product }: ProductCardProps) {
-  const { t, language } = useTranslation();
-
   const getProductImage = (imageId: string) => {
     return PlaceHolderImages.find((img) => img.id === imageId)?.imageUrl || '';
   };
@@ -44,7 +41,7 @@ export function ProductCard({ product }: ProductCardProps) {
         />
         {isLowStock && (
           <Badge variant="destructive" className="absolute top-2 right-2">
-            {t('lowStock')}
+            {'Low Stock'}
           </Badge>
         )}
       </CardHeader>
@@ -52,7 +49,7 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="flex items-start justify-between">
             <div className="grid gap-1">
                 <CardTitle className="font-headline text-lg leading-tight">
-                    {language === 'ar' ? (product as any).nameAr : product.name}
+                    {product.name}
                 </CardTitle>
                 <p className="text-sm text-muted-foreground">{product.category}</p>
             </div>
@@ -66,11 +63,11 @@ export function ProductCard({ product }: ProductCardProps) {
                 <DropdownMenuContent align="end">
                 <DropdownMenuItem>
                     <Edit className="me-2 h-4 w-4" />
-                    <span>{t('edit')}</span>
+                    <span>{'Edit'}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive">
                     <Trash2 className="me-2 h-4 w-4" />
-                    <span>{t('delete')}</span>
+                    <span>{'Delete'}</span>
                 </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
@@ -78,15 +75,15 @@ export function ProductCard({ product }: ProductCardProps) {
 
         <div className="mt-4 grid grid-cols-3 gap-4 text-center text-sm">
             <div>
-                <p className="text-xs text-muted-foreground">{t('sellPrice')}</p>
+                <p className="text-xs text-muted-foreground">{'Sell Price'}</p>
                 <p className="font-semibold font-mono">${product.sellPrice.toFixed(2)}</p>
             </div>
             <div>
-                <p className="text-xs text-muted-foreground">{t('profit')}</p>
+                <p className="text-xs text-muted-foreground">{'Profit'}</p>
                 <p className="font-semibold text-primary font-mono">+${product.profit.toFixed(2)}</p>
             </div>
             <div>
-                <p className="text-xs text-muted-foreground">{t('quantity')}</p>
+                <p className="text-xs text-muted-foreground">{'Quantity'}</p>
                 <p className="font-semibold font-mono">{product.quantity}</p>
             </div>
         </div>

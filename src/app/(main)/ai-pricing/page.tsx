@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useTranslation } from '@/hooks/use-translation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -33,7 +32,6 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function AiPricingPage() {
-  const { t } = useTranslation();
   const [suggestions, setSuggestions] = useState<AIPricingSuggestionOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -70,12 +68,12 @@ export default function AiPricingPage() {
 
   return (
     <>
-      <Header title={t('aiPricing')} />
+      <Header title={'AI Pricing'} />
       <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
         <Card className="glassmorphic">
           <CardHeader>
-            <CardTitle className="font-headline">{t('getAISuggestions')}</CardTitle>
-            <CardDescription>{t('productDescription')}</CardDescription>
+            <CardTitle className="font-headline">{'Get AI Suggestions'}</CardTitle>
+            <CardDescription>{'Product Description'}</CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -86,7 +84,7 @@ export default function AiPricingPage() {
                     name="productName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t('productName')}</FormLabel>
+                        <FormLabel>{'Product Name'}</FormLabel>
                         <FormControl>
                           <Input placeholder="e.g., Cool Summer T-Shirt" {...field} />
                         </FormControl>
@@ -99,7 +97,7 @@ export default function AiPricingPage() {
                     name="category"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t('category')}</FormLabel>
+                        <FormLabel>{'Category'}</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
@@ -121,7 +119,7 @@ export default function AiPricingPage() {
                     name="buyPrice"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t('buyPrice')}</FormLabel>
+                        <FormLabel>{'Buy Price'}</FormLabel>
                         <FormControl>
                           <Input type="number" placeholder="10" {...field} />
                         </FormControl>
@@ -134,7 +132,7 @@ export default function AiPricingPage() {
                     name="sellPrice"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t('sellPrice')}</FormLabel>
+                        <FormLabel>{'Sell Price'}</FormLabel>
                         <FormControl>
                           <Input type="number" placeholder="25" {...field} />
                         </FormControl>
@@ -147,7 +145,7 @@ export default function AiPricingPage() {
                     name="quantity"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t('quantity')}</FormLabel>
+                        <FormLabel>{'Quantity'}</FormLabel>
                         <FormControl>
                           <Input type="number" placeholder="100" {...field} />
                         </FormControl>
@@ -160,7 +158,7 @@ export default function AiPricingPage() {
                     name="profitMargin"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t('profitMargin')}</FormLabel>
+                        <FormLabel>{'Profit Margin'}</FormLabel>
                         <FormControl>
                           <Input type="number" step="0.1" placeholder="0.6" {...field} />
                         </FormControl>
@@ -173,7 +171,7 @@ export default function AiPricingPage() {
                     name="color"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t('color')}</FormLabel>
+                        <FormLabel>{'Color'}</FormLabel>
                         <FormControl>
                           <Input placeholder="e.g., Black" {...field} />
                         </FormControl>
@@ -186,7 +184,7 @@ export default function AiPricingPage() {
                     name="size"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t('size')}</FormLabel>
+                        <FormLabel>{'Size'}</FormLabel>
                         <FormControl>
                           <Input placeholder="e.g., M, L, 32" {...field} />
                         </FormControl>
@@ -200,9 +198,9 @@ export default function AiPricingPage() {
                       name="pastSalesData"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t('pastSalesData')}</FormLabel>
+                          <FormLabel>{'Past Sales Data'}</FormLabel>
                           <FormControl>
-                            <Textarea placeholder={t('pastSalesData')} {...field} />
+                            <Textarea placeholder={'Past Sales Data'} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -212,7 +210,7 @@ export default function AiPricingPage() {
                 </div>
 
                 <Button type="submit" disabled={isLoading}>
-                  {isLoading ? 'Generating...' : t('generateSuggestions')}
+                  {isLoading ? 'Generating...' : 'Generate Suggestions'}
                   <BrainCircuit className="ms-2 h-4 w-4" />
                 </Button>
               </form>
@@ -220,32 +218,32 @@ export default function AiPricingPage() {
 
             {suggestions && (
               <div className="mt-8 space-y-4">
-                <h3 className="font-headline text-2xl font-bold">{t('aiSuggestions')}</h3>
+                <h3 className="font-headline text-2xl font-bold">{'AI Suggestions'}</h3>
                 <div className="grid gap-4 md:grid-cols-2">
                     <Alert>
                         <DollarSign className="h-4 w-4" />
-                        <AlertTitle>{t('suggestedPrice')}</AlertTitle>
+                        <AlertTitle>{'Suggested Price'}</AlertTitle>
                         <AlertDescription className="font-headline text-lg font-bold text-primary">${suggestions.suggestedPrice.toFixed(2)}</AlertDescription>
                     </Alert>
                     <Alert>
                         <TrendingUp className="h-4 w-4" />
-                        <AlertTitle>{t('profitTrendAnalysis')}</AlertTitle>
+                        <AlertTitle>{'Profit Trend Analysis'}</AlertTitle>
                         <AlertDescription>{suggestions.profitTrendAnalysis}</AlertDescription>
                     </Alert>
                     <Alert>
                         <TrendingDown className="h-4 w-4" />
-                        <AlertTitle>{t('lowSellingWarning')}</AlertTitle>
+                        <AlertTitle>{'Low Selling Warning'}</AlertTitle>
                         <AlertDescription>{suggestions.lowSellingWarning}</AlertDescription>
                     </Alert>
                     <Alert>
                         <Package className="h-4 w-4" />
-                        <AlertTitle>{t('restockSuggestion')}</AlertTitle>
+                        <AlertTitle>{'Restock Suggestion'}</AlertTitle>
                         <AlertDescription>{suggestions.restockSuggestion}</AlertDescription>
                     </Alert>
                     <div className="md:col-span-2">
                         <Alert className="border-primary/50 text-primary">
                             <Lightbulb className="h-4 w-4 text-primary" />
-                            <AlertTitle>{t('dailySmartTip')}</AlertTitle>
+                            <AlertTitle>{'Daily Smart Tip'}</AlertTitle>
                             <AlertDescription>{suggestions.dailySmartTip}</AlertDescription>
                         </Alert>
                     </div>

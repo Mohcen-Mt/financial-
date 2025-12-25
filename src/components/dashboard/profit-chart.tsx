@@ -4,14 +4,12 @@
 import { Bar, BarChart, XAxis, YAxis } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { useTranslation } from '@/hooks/use-translation';
 
 interface ProfitChartProps {
   data: { week: string; profit: number }[];
 }
 
 export function ProfitChart({ data }: ProfitChartProps) {
-  const { t } = useTranslation();
   const chartConfig = {
     profit: {
       label: 'Profit',
@@ -22,7 +20,7 @@ export function ProfitChart({ data }: ProfitChartProps) {
   return (
     <Card className="glassmorphic lg:col-span-4">
       <CardHeader>
-        <CardTitle className="font-headline">{t('profitAnalysis')}</CardTitle>
+        <CardTitle className="font-headline">{'Profit Analysis'}</CardTitle>
       </CardHeader>
       <CardContent className="ps-2">
         <ChartContainer config={chartConfig} className="min-h-[200px] w-full">

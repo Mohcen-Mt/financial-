@@ -1,6 +1,5 @@
 
 'use client';
-import { useTranslation } from "@/hooks/use-translation";
 import { Header } from "@/components/layout/header";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { ProfitChart } from "@/components/dashboard/profit-chart";
@@ -23,6 +22,13 @@ interface Stat {
   change: string;
 }
 
+const titles: { [key: string]: string } = {
+  totalProfit: 'Total Profit',
+  totalProducts: 'Total Products',
+  totalSales: 'Total Sales',
+  bestSellingProduct: 'Best Selling Product',
+};
+
 interface DashboardClientProps {
   stats: Stat[];
   weeklyProfitData: typeof weeklyProfitDataType;
@@ -30,17 +36,15 @@ interface DashboardClientProps {
 }
 
 export function DashboardClient({ stats, weeklyProfitData, recentProducts }: DashboardClientProps) {
-  const { t } = useTranslation();
-
   return (
     <>
-      <Header title={t('dashboard')} />
+      <Header title={'Dashboard'} />
       <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (
             <StatCard
               key={stat.titleKey}
-              title={t(stat.titleKey as any)}
+              title={titles[stat.titleKey] || stat.titleKey}
               value={stat.value}
               icon={iconMap[stat.icon]}
               change={stat.change}

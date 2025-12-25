@@ -7,7 +7,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ArrowUpRight } from 'lucide-react';
-import { useTranslation } from '@/hooks/use-translation';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { Product } from '@/lib/types';
 import Link from 'next/link';
@@ -17,8 +16,6 @@ interface RecentProductsTableProps {
 }
 
 export function RecentProductsTable({ products }: RecentProductsTableProps) {
-  const { t, language } = useTranslation();
-
   const getProductImage = (imageId: string) => {
     return PlaceHolderImages.find((img) => img.id === imageId)?.imageUrl || '';
   };
@@ -27,14 +24,14 @@ export function RecentProductsTable({ products }: RecentProductsTableProps) {
     <Card className="glassmorphic lg:col-span-3">
       <CardHeader className="flex flex-row items-center">
         <div className="grid gap-2">
-          <CardTitle className="font-headline">{t('recentProducts')}</CardTitle>
+          <CardTitle className="font-headline">{'Recent Products'}</CardTitle>
           <CardDescription>
             You have {products.length} recent products.
           </CardDescription>
         </div>
         <Button asChild size="sm" className="ms-auto gap-1">
           <Link href="/products">
-            {t('viewAll')}
+            {'View All'}
             <ArrowUpRight className="h-4 w-4" />
           </Link>
         </Button>
@@ -43,8 +40,8 @@ export function RecentProductsTable({ products }: RecentProductsTableProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{t('productName')}</TableHead>
-              <TableHead className="text-center">{t('profit')}</TableHead>
+              <TableHead>{'Product Name'}</TableHead>
+              <TableHead className="text-center">{'Profit'}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -61,7 +58,7 @@ export function RecentProductsTable({ products }: RecentProductsTableProps) {
                       data-ai-hint={PlaceHolderImages.find(img => img.id === product.image)?.imageHint}
                     />
                     <div>
-                      <div className="font-medium">{language === 'ar' ? (product as any).nameAr : product.name}</div>
+                      <div className="font-medium">{product.name}</div>
                       <div className="text-sm text-muted-foreground">{product.category}</div>
                     </div>
                   </div>
