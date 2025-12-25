@@ -13,6 +13,7 @@ import {
   Trash2,
   Package,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 import type { Product } from '@/lib/types';
 import { Header } from '@/components/layout/header';
@@ -47,19 +48,14 @@ import { ProductCard } from '@/components/products/product-card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { useProducts } from '@/contexts/products-provider';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
-
-interface ProductsClientProps {
-  products: Product[];
-}
 
 const LOW_STOCK_THRESHOLD = 20;
 
-export function ProductsClient({ products }: ProductsClientProps) {
+export function ProductsClient() {
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
-  const { deleteProduct } = useProducts();
+  const { products, deleteProduct } = useProducts();
   const { toast } = useToast();
   const router = useRouter();
 
@@ -263,8 +259,8 @@ export function ProductsClient({ products }: ProductsClientProps) {
                     </div>
                 </CardHeader>
                 <CardContent className="text-center">
-                    <CardTitle className="font-headline text-2xl">{'No Products Found'}</CardTitle>
-                    <CardDescription className="mt-2">{"You haven't added any products yet. Get started by adding one."}</CardDescription>
+                    <CardTitle className="font-headline text-2xl">No Products Found</CardTitle>
+                    <CardDescription className="mt-2">You haven't added any products yet. Get started by adding one.</CardDescription>
                 </CardContent>
                 <CardFooter>
                     <Button asChild className="mt-4 gap-1">
