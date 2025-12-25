@@ -15,17 +15,18 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { Product } from '@/lib/types';
+import type { ReactNode } from 'react';
 
 interface ProductCardProps {
   product: Product;
   onEdit: () => void;
-  onDelete: () => void;
   onSell: () => void;
+  children: ReactNode;
 }
 
 const LOW_STOCK_THRESHOLD = 20;
 
-export function ProductCard({ product, onEdit, onDelete, onSell }: ProductCardProps) {
+export function ProductCard({ product, onEdit, onSell, children }: ProductCardProps) {
   const getProductImage = (imageId: string) => {
     return PlaceHolderImages.find((img) => img.id === imageId)?.imageUrl || '';
   };
@@ -57,29 +58,7 @@ export function ProductCard({ product, onEdit, onDelete, onSell }: ProductCardPr
                 </CardTitle>
                 <p className="text-sm text-muted-foreground">{product.category}</p>
             </div>
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0">
-                    <MoreHorizontal className="h-4 w-4" />
-                    <span className="sr-only">Open menu</span>
-                </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={onSell}>
-                        <ShoppingBag className="me-2 h-4 w-4" />
-                        <span>{'Sell'}</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={onEdit}>
-                        <Edit className="me-2 h-4 w-4" />
-                        <span>{'Edit'}</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={onDelete} className="text-destructive focus:bg-destructive/10 focus:text-destructive">
-                        <Trash2 className="me-2 h-4 w-4" />
-                        <span>{'Delete'}</span>
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
+            {children}
         </div>
 
         <div className="mt-4 grid grid-cols-3 gap-4 text-center text-sm">

@@ -44,7 +44,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
 import { ProductCard } from '@/components/products/product-card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -63,8 +63,6 @@ export function ProductsClient() {
   const router = useRouter();
 
   const [productToSell, setProductToSell] = useState<Product | null>(null);
-  const [productToDelete, setProductToDelete] = useState<Product | null>(null);
-
 
   const categories = useMemo(() => {
     if (!products) return [];
@@ -86,16 +84,13 @@ export function ProductsClient() {
     return PlaceHolderImages.find((img) => img.id === imageId)?.imageUrl || '';
   };
 
-  const handleDeleteConfirm = () => {
-    if (productToDelete) {
-        deleteProduct(productToDelete.id);
-        toast({
-            title: "Product Deleted",
-            description: `${productToDelete.name} has been removed.`,
-            variant: "destructive",
-        });
-        setProductToDelete(null);
-    }
+  const handleDelete = (product: Product) => {
+    deleteProduct(product.id);
+    toast({
+        title: "Product Deleted",
+        description: `${product.name} has been removed.`,
+        variant: "destructive",
+    });
   }
 
   const handleEdit = (productId: string) => {
@@ -103,30 +98,59 @@ export function ProductsClient() {
   }
   
   const ProductActions = ({ product }: { product: Product }) => (
-    <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-            <Button aria-haspopup="true" size="icon" variant="ghost">
-                <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Toggle menu</span>
-            </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setProductToSell(product)}>
-                <ShoppingBag className="me-2 h-4 w-4" />
-                <span>{'Sell'}</span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => handleEdit(product.id)}>
-                <Edit className="me-2 h-4 w-4" />
-                <span>{'Edit'}</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setProductToDelete(product)} className="text-destructive focus:bg-destructive/10 focus:text-destructive">
-                <Trash2 className="me-2 h-4 w-4" />
-                <span>{'Delete'}</span>
-            </DropdownMenuItem>
-        </DropdownMenuContent>
-    </DropdownMenu>
+    <AlertDialog>
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button aria-haspopup="true" size="icon" variant="ghost">
+                    <MoreHorizontal className="h-4 w-4" />
+                    <span className="sr-only">Toggle menu</span>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setProductToSell(product)}>
+                    <ShoppingBag className="me-2 h-4 w-4" />
+                    <span>{'Sell'}</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => handleEdit(product.id)}>
+                    <Edit className="me-2 h-4 w-4" />
+                    <span>{'Edit'}</span>
+                </DropdownMenuItem>
+                <AlertDialogTrigger asChild>
+                    <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+                        <Trash2 className="me-2 h-4 w-4" />
+                        <span>{'Delete'}</span>
+                    </DropdownMenuItem>
+                </AlertDialogTrigger>
+            </DropdownMenuContent>
+        </DropdownMenu>
+        <AlertDialogContent>
+            <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete the product from your list.
+                </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={() => handleDelete(product)}>Continue</AlertDialogAction>
+            </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
 );
+
+  if (!products) {
+    return (
+      <>
+        <Header title={'Products'} />
+        <div className="flex-1 space-y-4 p-4 pt-6 md:p-8" suppressHydrationWarning>
+            <div className="flex h-[60vh] items-center justify-center">
+                <p>Loading products...</p>
+            </div>
+        </div>
+      </>
+    )
+  }
 
   return (
     <>
@@ -194,9 +218,10 @@ export function ProductsClient() {
                     key={product.id} 
                     product={product} 
                     onEdit={() => handleEdit(product.id)} 
-                    onDelete={() => setProductToDelete(product)}
                     onSell={() => setProductToSell(product)}
-                />
+                >
+                    <ProductActions product={product} />
+                </ProductCard>
               ))}
             </div>
           ) : (
@@ -289,20 +314,6 @@ export function ProductsClient() {
           }}
         />
       )}
-      <AlertDialog open={!!productToDelete} onOpenChange={(isOpen) => !isOpen && setProductToDelete(null)}>
-        <AlertDialogContent>
-            <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete the product from your list.
-                </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-                <AlertDialogCancel onClick={() => setProductToDelete(null)}>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDeleteConfirm}>Continue</AlertDialogAction>
-            </AlertDialogFooter>
-        </AlertDialogContent>
-    </AlertDialog>
     </>
   );
 }
