@@ -67,9 +67,9 @@ export default function AiPricingPage() {
   };
 
   return (
-    <>
+    <div suppressHydrationWarning>
       <Header title={'AI Pricing'} />
-      <div className="flex-1 space-y-4 p-4 pt-6 md:p-8" suppressHydrationWarning>
+      <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
         <Card className="glassmorphic">
           <CardHeader>
             <CardTitle className="font-headline">{'Get AI Suggestions'}</CardTitle>
@@ -254,6 +254,6 @@ export default function AiPricingPage() {
           </CardContent>
         </Card>
       </div>
-    </>
+    </div>
   );
 }
