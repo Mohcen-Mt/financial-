@@ -44,7 +44,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
 import { ProductCard } from '@/components/products/product-card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -63,10 +63,11 @@ export function ProductsClient() {
   const router = useRouter();
 
   const [productToSell, setProductToSell] = useState<Product | null>(null);
+  const [productToDelete, setProductToDelete] = useState<Product | null>(null);
 
 
   const categories = useMemo(() => {
-    if (!products) return ['all'];
+    if (!products) return [];
     const allCategories = products.map((p) => p.category);
     return ['all', ...Array.from(new Set(allCategories))];
   }, [products]);
@@ -85,13 +86,16 @@ export function ProductsClient() {
     return PlaceHolderImages.find((img) => img.id === imageId)?.imageUrl || '';
   };
 
-  const handleDelete = (productId: string, productName: string) => {
-    deleteProduct(productId);
-    toast({
-        title: "Product Deleted",
-        description: `${productName} has been removed.`,
-        variant: "destructive",
-    })
+  const handleDeleteConfirm = () => {
+    if (productToDelete) {
+        deleteProduct(productToDelete.id);
+        toast({
+            title: "Product Deleted",
+            description: `${productToDelete.name} has been removed.`,
+            variant: "destructive",
+        });
+        setProductToDelete(null);
+    }
   }
 
   const handleEdit = (productId: string) => {
@@ -99,12 +103,11 @@ export function ProductsClient() {
   }
   
   const ProductActions = ({ product }: { product: Product }) => (
-    <AlertDialog>
-        <DropdownMenu>
+    <DropdownMenu>
         <DropdownMenuTrigger asChild>
             <Button aria-haspopup="true" size="icon" variant="ghost">
-            <MoreHorizontal className="h-4 w-4" />
-            <span className="sr-only">Toggle menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+                <span className="sr-only">Toggle menu</span>
             </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -117,27 +120,12 @@ export function ProductsClient() {
                 <Edit className="me-2 h-4 w-4" />
                 <span>{'Edit'}</span>
             </DropdownMenuItem>
-            <AlertDialogTrigger asChild>
-                <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-destructive focus:bg-destructive/10 focus:text-destructive">
-                    <Trash2 className="me-2 h-4 w-4" />
-                    <span>{'Delete'}</span>
-                </DropdownMenuItem>
-            </AlertDialogTrigger>
+            <DropdownMenuItem onClick={() => setProductToDelete(product)} className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+                <Trash2 className="me-2 h-4 w-4" />
+                <span>{'Delete'}</span>
+            </DropdownMenuItem>
         </DropdownMenuContent>
-        </DropdownMenu>
-        <AlertDialogContent>
-            <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete the product from your list.
-                </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={() => handleDelete(product.id, product.name)}>Continue</AlertDialogAction>
-            </AlertDialogFooter>
-        </AlertDialogContent>
-    </AlertDialog>
+    </DropdownMenu>
 );
 
   return (
@@ -206,7 +194,7 @@ export function ProductsClient() {
                     key={product.id} 
                     product={product} 
                     onEdit={() => handleEdit(product.id)} 
-                    onDelete={() => handleDelete(product.id, product.name)}
+                    onDelete={() => setProductToDelete(product)}
                     onSell={() => setProductToSell(product)}
                 />
               ))}
@@ -301,6 +289,20 @@ export function ProductsClient() {
           }}
         />
       )}
+      <AlertDialog open={!!productToDelete} onOpenChange={(isOpen) => !isOpen && setProductToDelete(null)}>
+        <AlertDialogContent>
+            <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete the product from your list.
+                </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+                <AlertDialogCancel onClick={() => setProductToDelete(null)}>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDeleteConfirm}>Continue</AlertDialogAction>
+            </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
     </>
   );
 }
