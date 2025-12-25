@@ -1,11 +1,11 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { ArrowLeft, Upload } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -16,8 +16,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Header } from '@/components/layout/header';
 import { useToast } from '@/hooks/use-toast';
 import { useProducts } from '@/contexts/products-provider';
+import type { Product } from '@/lib/types';
 
 const formSchema = z.object({
+  id: z.string(),
   name: z.string().min(2, 'Product name is required'),
   category: z.enum(['T-shirt', 'Hoodie', 'Pants']),
   buyPrice: z.coerce.number().positive('Buy price must be positive'),
@@ -25,52 +27,72 @@ const formSchema = z.object({
   quantity: z.coerce.number().int().positive('Quantity must be a positive integer'),
   color: z.string().min(2, 'Color is required'),
   size: z.string().min(1, 'Size is required'),
+  image: z.string(),
+  addedDate: z.string(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function AddProductPage() {
+export default function EditProductPage() {
   const router = useRouter();
+  const params = useParams();
   const { toast } = useToast();
-  const { addProduct } = useProducts();
+  const { getProductById, updateProduct } = useProducts();
   const [isLoading, setIsLoading] = useState(false);
+  const [product, setProduct] = useState<Product | undefined>(undefined);
+
+  const productId = Array.isArray(params.id) ? params.id[0] : params.id;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-      category: 'T-shirt',
-      buyPrice: 10,
-      sellPrice: 25,
-      quantity: 50,
-      color: '',
-      size: 'M',
-    },
   });
+
+  useEffect(() => {
+    if (productId) {
+      const existingProduct = getProductById(productId);
+      setProduct(existingProduct);
+      if (existingProduct) {
+        form.reset(existingProduct);
+      }
+    }
+  }, [productId, getProductById, form]);
 
   const buyPrice = form.watch('buyPrice');
   const sellPrice = form.watch('sellPrice');
   const profit = isNaN(sellPrice) || isNaN(buyPrice) ? 0 : sellPrice - buyPrice;
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    if (!product) return;
+    
     setIsLoading(true);
-    addProduct(data);
+    
+    updateProduct({ ...data, profit: data.sellPrice - data.buyPrice });
     
     toast({
-        title: 'Product Added',
+        title: 'Product Updated',
         description: data.name,
     });
-
-    // Short delay to allow toast to be seen
+    
     await new Promise(resolve => setTimeout(resolve, 500));
-
+    
     setIsLoading(false);
     router.push('/products');
   };
+  
+  if (!product) {
+    return (
+      <>
+        <Header title={'Edit Product'} />
+        <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
+            <p>Product not found.</p>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
-      <Header title={'Add Product'} />
+      <Header title={'Edit Product'} />
       <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
         <div className="flex items-center gap-4">
             <Button variant="outline" size="icon" className="h-7 w-7" onClick={() => router.back()}>
@@ -78,13 +100,13 @@ export default function AddProductPage() {
                 <span className="sr-only">Back</span>
             </Button>
             <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                {'Add New Product'}
+                {`Edit: ${product.name}`}
             </h1>
         </div>
         <Card className="glassmorphic">
           <CardHeader>
             <CardTitle className="font-headline">{'Product Details'}</CardTitle>
-            <CardDescription>{'Fill in the information about your new product.'}</CardDescription>
+            <CardDescription>{'Update the information for your product.'}</CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -219,7 +241,7 @@ export default function AddProductPage() {
                         {'Cancel'}
                     </Button>
                     <Button type="submit" disabled={isLoading}>
-                        {isLoading ? 'Saving...' : 'Save Product'}
+                        {isLoading ? 'Saving...' : 'Save Changes'}
                     </Button>
                 </div>
               </form>

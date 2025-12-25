@@ -4,7 +4,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'Financial Alchemist | الخيميائي المالي',
+  title: 'Financial Alchemist',
   description: 'Your smart financial agent for managing your freelance business.',
 };
 

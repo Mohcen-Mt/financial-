@@ -12,16 +12,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { Product } from '@/lib/types';
 
 interface ProductCardProps {
   product: Product;
+  onEdit: () => void;
+  onDelete: () => void;
 }
 
 const LOW_STOCK_THRESHOLD = 20;
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
   const getProductImage = (imageId: string) => {
     return PlaceHolderImages.find((img) => img.id === imageId)?.imageUrl || '';
   };
@@ -61,14 +64,30 @@ export function ProductCard({ product }: ProductCardProps) {
                 </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={onEdit}>
                     <Edit className="me-2 h-4 w-4" />
                     <span>{'Edit'}</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive">
-                    <Trash2 className="me-2 h-4 w-4" />
-                    <span>{'Delete'}</span>
-                </DropdownMenuItem>
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+                            <Trash2 className="me-2 h-4 w-4" />
+                            <span>{'Delete'}</span>
+                        </DropdownMenuItem>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This action cannot be undone. This will permanently delete the product from your list.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={onDelete}>Continue</AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>

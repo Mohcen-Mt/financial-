@@ -41,9 +41,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
 import { ProductCard } from '@/components/products/product-card';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { useProducts } from '@/contexts/products-provider';
+import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 interface ProductsClientProps {
   products: Product[];
@@ -55,6 +59,10 @@ export function ProductsClient({ products }: ProductsClientProps) {
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const { deleteProduct } = useProducts();
+  const { toast } = useToast();
+  const router = useRouter();
+
 
   const categories = useMemo(() => {
     const allCategories = products.map((p) => p.category);
@@ -73,6 +81,19 @@ export function ProductsClient({ products }: ProductsClientProps) {
   const getProductImage = (imageId: string) => {
     return PlaceHolderImages.find((img) => img.id === imageId)?.imageUrl || '';
   };
+
+  const handleDelete = (productId: string, productName: string) => {
+    deleteProduct(productId);
+    toast({
+        title: "Product Deleted",
+        description: `${productName} has been removed.`,
+        variant: "destructive",
+    })
+  }
+
+  const handleEdit = (productId: string) => {
+    router.push(`/products/edit/${productId}`);
+  }
 
   return (
     <>
@@ -136,7 +157,7 @@ export function ProductsClient({ products }: ProductsClientProps) {
           viewMode === 'grid' ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.id} product={product} onEdit={() => handleEdit(product.id)} onDelete={() => handleDelete(product.id, product.name)} />
               ))}
             </div>
           ) : (
@@ -195,14 +216,30 @@ export function ProductsClient({ products }: ProductsClientProps) {
                                         </Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
-                                        <DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => handleEdit(product.id)}>
                                             <Edit className="me-2 h-4 w-4" />
                                             <span>{'Edit'}</span>
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive">
-                                            <Trash2 className="me-2 h-4 w-4" />
-                                            <span>{'Delete'}</span>
-                                        </DropdownMenuItem>
+                                        <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+                                                    <Trash2 className="me-2 h-4 w-4" />
+                                                    <span>{'Delete'}</span>
+                                                </DropdownMenuItem>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader>
+                                                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                                    <AlertDialogDescription>
+                                                        This action cannot be undone. This will permanently delete the product from your list.
+                                                    </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                    <AlertDialogAction onClick={() => handleDelete(product.id, product.name)}>Continue</AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
                                     </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>

@@ -1,10 +1,10 @@
 
-import { mockProducts } from '@/lib/data';
+'use client';
 import { ProductsClient } from './products-client';
-import type { Product } from '@/lib/types';
+import { useProducts } from '@/contexts/products-provider';
 
 export default function ProductsPage() {
-  const products: Product[] = mockProducts;
+  const { products } = useProducts();
 
   return (
     <ProductsClient products={products} />

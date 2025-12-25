@@ -1,6 +1,8 @@
 
+'use client';
 
 import { MainLayoutClient } from './main-layout-client';
+import { ProductsProvider } from '@/contexts/products-provider';
 
 export default function MainLayout({
   children,
@@ -8,6 +10,8 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-      <MainLayoutClient>{children}</MainLayoutClient>
+      <ProductsProvider>
+        <MainLayoutClient>{children}</MainLayoutClient>
+      </ProductsProvider>
   );
 }
