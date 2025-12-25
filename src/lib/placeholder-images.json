@@ -1,3 +1,40 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "product-1",
+      "description": "A cool black t-shirt.",
+      "imageUrl": "https://images.unsplash.com/photo-1711641066067-3c1d03492345?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxibGFjayUyMHQtc2hpcnR8ZW58MHx8fHwxNzY2NjQ4OTQ3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "black t-shirt"
+    },
+    {
+      "id": "product-2",
+      "description": "A warm blue hoodie.",
+      "imageUrl": "https://images.unsplash.com/photo-1706067107607-b604fb5605bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxibHVlJTIwaG9vZGllfGVufDB8fHx8MTc2NjY5ODc3Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "blue hoodie"
+    },
+    {
+      "id": "product-3",
+      "description": "Stylish gray pants.",
+      "imageUrl": "https://images.unsplash.com/photo-1602585198422-d795fa9bfd6f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxncmF5JTIwcGFudHN8ZW58MHx8fHwxNzY2Njk4Nzc2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "gray pants"
+    },
+    {
+      "id": "product-4",
+      "description": "A white t-shirt.",
+      "imageUrl": "https://images.unsplash.com/photo-1576417677416-6ca3adfb5435?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx3aGl0ZSUyMHQtc2hpcnR8ZW58MHx8fHwxNzY2NTg1MTA0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "white t-shirt"
+    },
+    {
+      "id": "product-5",
+      "description": "A red hoodie.",
+      "imageUrl": "https://images.unsplash.com/photo-1625053705384-2e21ba294f2f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxyZWQlMjBob29kaWV8ZW58MHx8fHwxNzY2NjQzMDg2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "red hoodie"
+    },
+    {
+      "id": "product-6",
+      "description": "Black skinny pants.",
+      "imageUrl": "https://images.unsplash.com/photo-1615945345726-219ecc78189e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxibGFjayUyMHBhbnRzfGVufDB8fHx8MTc2NjY3ODc0NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "black pants"
+    }
+  ]
 }

@@ -1,0 +1,243 @@
+
+'use client';
+
+import { useState, useMemo } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import {
+  PlusCircle,
+  LayoutGrid,
+  List,
+  MoreHorizontal,
+  Edit,
+  Trash2,
+  Package,
+} from 'lucide-react';
+
+import type { Product } from '@/lib/types';
+import { useTranslation } from '@/hooks/use-translation';
+import { Header } from '@/components/layout/header';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+
+import { ProductCard } from '@/components/products/product-card';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+
+interface ProductsClientProps {
+  products: Product[];
+}
+
+const LOW_STOCK_THRESHOLD = 20;
+
+export function ProductsClient({ products }: ProductsClientProps) {
+  const { t, language } = useTranslation();
+  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+
+  const categories = useMemo(() => {
+    const allCategories = products.map((p) => p.category);
+    return ['all', ...Array.from(new Set(allCategories))];
+  }, [products]);
+
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      const name = language === 'ar' ? (product as any).nameAr : product.name;
+      const matchesSearch = name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = categoryFilter === 'all' || product.category === categoryFilter;
+      return matchesSearch && matchesCategory;
+    });
+  }, [products, searchTerm, categoryFilter, language]);
+    
+  const getProductImage = (imageId: string) => {
+    return PlaceHolderImages.find((img) => img.id === imageId)?.imageUrl || '';
+  };
+
+  return (
+    <>
+      <Header title={t('products')} />
+      <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex flex-col gap-4 md:flex-row md:gap-2">
+                <Input
+                placeholder={t('filterByName')}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="h-9 w-full md:w-[250px]"
+                />
+                <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <SelectTrigger className="h-9 w-full md:w-[180px]">
+                    <SelectValue placeholder={t('filterByCategory')} />
+                </SelectTrigger>
+                <SelectContent>
+                    {categories.map((cat) => (
+                    <SelectItem key={cat} value={cat}>
+                        {cat === 'all' ? t('allCategories') : cat}
+                    </SelectItem>
+                    ))}
+                </SelectContent>
+                </Select>
+            </div>
+
+            <div className="flex items-center gap-2">
+                <div className="hidden rounded-md bg-muted p-0.5 md:flex">
+                <Button
+                    variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
+                    size="icon"
+                    className="h-7 w-7"
+                    onClick={() => setViewMode('grid')}
+                    aria-label={t('gridView')}
+                >
+                    <LayoutGrid className="h-4 w-4" />
+                </Button>
+                <Button
+                    variant={viewMode === 'table' ? 'secondary' : 'ghost'}
+                    size="icon"
+                    className="h-7 w-7"
+                    onClick={() => setViewMode('table')}
+                    aria-label={t('tableView')}
+                >
+                    <List className="h-4 w-4" />
+                </Button>
+                </div>
+                <Button asChild className="gap-1">
+                    <Link href="/products/add">
+                        <PlusCircle className="h-3.5 w-3.5" />
+                        <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                            {t('addProduct')}
+                        </span>
+                    </Link>
+                </Button>
+            </div>
+        </div>
+
+        {filteredProducts.length > 0 ? (
+          viewMode === 'grid' ? (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {filteredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          ) : (
+            <Card className="glassmorphic">
+                <CardContent className="p-0">
+                    <Table>
+                        <TableHeader>
+                        <TableRow>
+                            <TableHead>{t('productName')}</TableHead>
+                            <TableHead className="hidden md:table-cell">{t('category')}</TableHead>
+                            <TableHead className="text-center">{t('sellPrice')}</TableHead>
+                            <TableHead className="text-center">{t('profit')}</TableHead>
+                            <TableHead className="text-center">{t('quantity')}</TableHead>
+                            <TableHead className="hidden md:table-cell text-center">{t('addedDate')}</TableHead>
+                            <TableHead>
+                            <span className="sr-only">{t('actions')}</span>
+                            </TableHead>
+                        </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                        {filteredProducts.map((product) => {
+                            const isLowStock = product.quantity < LOW_STOCK_THRESHOLD;
+                            return (
+                                <TableRow key={product.id}>
+                                <TableCell>
+                                    <div className="flex items-center gap-4">
+                                        <Image
+                                        src={getProductImage(product.image)}
+                                        alt={product.name}
+                                        width={40}
+                                        height={40}
+                                        className="rounded-md object-cover"
+                                        data-ai-hint={PlaceHolderImages.find(img => img.id === product.image)?.imageHint}
+                                        />
+                                        <div>
+                                        <div className="font-medium">{language === 'ar' ? (product as any).nameAr : product.name}</div>
+                                        {isLowStock && <Badge variant="destructive" className="mt-1">{t('lowStock')}</Badge>}
+                                        </div>
+                                    </div>
+                                </TableCell>
+                                <TableCell className="hidden md:table-cell">{product.category}</TableCell>
+                                <TableCell className="text-center font-mono">${product.sellPrice.toFixed(2)}</TableCell>
+                                <TableCell className="text-center">
+                                    <Badge variant="outline" className="font-mono">
+                                        +${product.profit.toFixed(2)}
+                                    </Badge>
+                                </TableCell>
+                                <TableCell className="text-center font-mono">{product.quantity}</TableCell>
+                                <TableCell className="hidden md:table-cell text-center font-mono">{product.addedDate}</TableCell>
+                                <TableCell>
+                                    <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button aria-haspopup="true" size="icon" variant="ghost">
+                                        <MoreHorizontal className="h-4 w-4" />
+                                        <span className="sr-only">Toggle menu</span>
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                        <DropdownMenuItem>
+                                            <Edit className="me-2 h-4 w-4" />
+                                            <span>{t('edit')}</span>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem className="text-destructive focus:bg-destructive/10 focus:text-destructive">
+                                            <Trash2 className="me-2 h-4 w-4" />
+                                            <span>{t('delete')}</span>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </TableCell>
+                                </TableRow>
+                            );
+                        })}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
+          )
+        ) : (
+            <Card className="mt-4 flex h-[60vh] flex-col items-center justify-center glassmorphic">
+                <CardHeader>
+                    <div className="mx-auto rounded-full bg-primary/10 p-4">
+                        <Package className="h-12 w-12 text-primary" />
+                    </div>
+                </CardHeader>
+                <CardContent className="text-center">
+                    <CardTitle className="font-headline text-2xl">{t('noProductsFound')}</CardTitle>
+                    <CardDescription className="mt-2">{t('noProductsFoundDesc')}</CardDescription>
+                </CardContent>
+                <CardFooter>
+                    <Button asChild className="mt-4 gap-1">
+                        <Link href="/products/add">
+                            <PlusCircle className="h-3.5 w-3.5" />
+                            {t('addProduct')}
+                        </Link>
+                    </Button>
+                </CardFooter>
+            </Card>
+        )}
+      </div>
+    </>
+  );
+}
