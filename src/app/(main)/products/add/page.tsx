@@ -16,7 +16,6 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Header } from '@/components/layout/header';
 import { useToast } from '@/hooks/use-toast';
-import { I18nProvider } from '@/contexts/i18n-provider';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Product name is required'),
@@ -30,7 +29,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-function AddProductForm() {
+export default function AddProductPage() {
   const { t } = useTranslation();
   const router = useRouter();
   const { toast } = useToast();
@@ -231,12 +230,4 @@ function AddProductForm() {
       </div>
     </>
   );
-}
-
-export default function AddProductPage() {
-    return (
-        <I18nProvider>
-            <AddProductForm />
-        </I18nProvider>
-    )
 }
