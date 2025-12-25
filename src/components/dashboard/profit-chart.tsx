@@ -17,6 +17,10 @@ export function ProfitChart({ data }: ProfitChartProps) {
     },
   };
 
+  const formatCurrencyForChart = (value: number) => {
+    return new Intl.NumberFormat('fr-DZ', { style: 'currency', currency: 'DZD', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(value);
+  }
+
   return (
     <Card className="glassmorphic lg:col-span-4">
       <CardHeader>
@@ -33,12 +37,13 @@ export function ProfitChart({ data }: ProfitChartProps) {
               tickFormatter={(value) => value.slice(0, 6)}
             />
             <YAxis
-                tickFormatter={(value) => `${value / 1000}K دج`}
+                tickFormatter={(value) => formatCurrencyForChart(value as number)}
                 tickLine={false}
                 axisLine={false}
                 tickMargin={10}
+                width={100}
              />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent formatter={(value) => `${new Intl.NumberFormat('fr-DZ').format(value as number)} دج`} />} />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent formatter={(value) => formatCurrencyForChart(value as number)} />} />
             <Bar dataKey="profit" fill="var(--color-profit)" radius={8} />
           </BarChart>
         </ChartContainer>
