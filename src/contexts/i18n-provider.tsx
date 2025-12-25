@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { createContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import ar from '@/locales/ar.json';
 import en from '@/locales/en.json';
 
@@ -19,7 +19,8 @@ export const I18nContext = createContext<I18nContextType | undefined>(undefined)
 
 const translations = { en, ar };
 
-export function I18nProvider({ children }: { children: React.ReactNode }) {
+// Create a client-side only wrapper for the provider
+function I18nClientProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>('ar');
   const [direction, setDirection] = useState<Direction>('rtl');
 
@@ -52,4 +53,16 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
       {children}
     </I18nContext.Provider>
   );
+}
+
+
+export function I18nProvider({ children }: { children: React.ReactNode }) {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Render a placeholder on the server and the actual provider on the client
+  return isClient ? <I18nClientProvider>{children}</I18nClientProvider> : <>{children}</>;
 }
