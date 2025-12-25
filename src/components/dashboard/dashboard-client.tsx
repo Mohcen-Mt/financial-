@@ -38,11 +38,12 @@ interface DashboardClientProps {
   stats: Stat[];
   weeklyProfitData: weeklyProfitDataType[];
   recentProducts: Product[];
+  suppressHydrationWarning?: boolean;
 }
 
-export function DashboardClient({ stats, weeklyProfitData, recentProducts }: DashboardClientProps) {
+export function DashboardClient({ stats, weeklyProfitData, recentProducts, suppressHydrationWarning }: DashboardClientProps) {
   return (
-    <div suppressHydrationWarning>
+    <div suppressHydrationWarning={suppressHydrationWarning}>
       <Header title={'Dashboard'} />
       <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

@@ -96,6 +96,6 @@ export default function DashboardPage() {
   const recentProducts = products.sort((a,b) => new Date(b.addedDate).getTime() - new Date(a.addedDate).getTime()).slice(0, 5);
 
   return (
-    <DashboardClient stats={stats} weeklyProfitData={chartData} recentProducts={recentProducts} />
+    <DashboardClient stats={stats} weeklyProfitData={chartData} recentProducts={recentProducts} suppressHydrationWarning />
   );
 }
