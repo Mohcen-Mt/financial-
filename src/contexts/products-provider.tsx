@@ -1,3 +1,4 @@
+
 'use client';
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
@@ -43,7 +44,6 @@ export function ProductsProvider({ children }: { children: ReactNode }) {
       id: `prod-${new Date().getTime()}`,
       profit: productData.sellPrice - productData.buyPrice,
       addedDate: new Date().toISOString().split('T')[0],
-      image: `product-${(products.length % 6) + 1}` as Product['image'], // Cycle through available images
     };
     const updatedProducts = [...products, newProduct];
     persistProducts(updatedProducts);

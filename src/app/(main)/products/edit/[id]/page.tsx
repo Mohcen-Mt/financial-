@@ -6,7 +6,8 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft, Upload } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,6 +18,8 @@ import { Header } from '@/components/layout/header';
 import { useToast } from '@/hooks/use-toast';
 import { useProducts } from '@/contexts/products-provider';
 import type { Product } from '@/lib/types';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { ImagePicker } from '@/components/products/image-picker';
 
 const formSchema = z.object({
   id: z.string(),
@@ -27,7 +30,7 @@ const formSchema = z.object({
   quantity: z.coerce.number().int().positive('Quantity must be a positive integer'),
   color: z.string().min(2, 'Color is required'),
   size: z.string().min(1, 'Size is required'),
-  image: z.string(),
+  image: z.string().min(1, 'Image is required'),
   addedDate: z.string(),
 });
 
@@ -59,6 +62,7 @@ export default function EditProductPage() {
 
   const buyPrice = form.watch('buyPrice');
   const sellPrice = form.watch('sellPrice');
+  const imageId = form.watch('image');
   const profit = isNaN(sellPrice) || isNaN(buyPrice) ? 0 : sellPrice - buyPrice;
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -79,6 +83,8 @@ export default function EditProductPage() {
     router.push('/products');
   };
   
+  const selectedImage = PlaceHolderImages.find(p => p.id === imageId);
+
   if (!product) {
     return (
       <>
@@ -224,14 +230,32 @@ export default function EditProductPage() {
                     />
                   </div>
                   <div className="md:col-span-1">
-                    <FormLabel>{'Product Image'}</FormLabel>
-                    <Card className="mt-2 flex aspect-square w-full items-center justify-center border-2 border-dashed">
-                        <div className="text-center">
-                            <Upload className="mx-auto h-12 w-12 text-muted-foreground" />
-                            <p className="mt-2 text-sm text-muted-foreground">{'Drag & drop or click to upload'}</p>
-                            <Button variant="ghost" className="mt-2" type="button">{'Select File'}</Button>
-                        </div>
-                    </Card>
+                    <FormField
+                        control={form.control}
+                        name="image"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>{'Product Image'}</FormLabel>
+                                <Card className="mt-2 flex aspect-square w-full items-center justify-center overflow-hidden">
+                                    {selectedImage ? (
+                                        <Image
+                                            src={selectedImage.imageUrl}
+                                            alt={selectedImage.description}
+                                            width={400}
+                                            height={400}
+                                            className="h-full w-full object-cover"
+                                        />
+                                    ) : (
+                                        <div className="text-center text-muted-foreground">No image selected</div>
+                                    )}
+                                </Card>
+                                <FormControl>
+                                    <ImagePicker value={field.value} onChange={field.onChange} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                   </div>
                 </div>
 
