@@ -4,7 +4,7 @@ import { Header } from "@/components/layout/header";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { ProfitChart } from "@/components/dashboard/profit-chart";
 import { RecentProductsTable } from "@/components/dashboard/recent-products-table";
-import type { Product, weeklyProfitData as weeklyProfitDataType } from "@/lib/data";
+import type { Product } from "@/lib/types";
 import { DollarSign, Package, ShoppingCart, TrendingUp } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -24,14 +24,19 @@ interface Stat {
 
 const titles: { [key: string]: string } = {
   totalProfit: 'Total Profit',
-  totalProducts: 'Total Products',
+  totalRevenue: 'Total Revenue',
   totalSales: 'Total Sales',
   bestSellingProduct: 'Best Selling Product',
 };
 
+interface weeklyProfitDataType {
+    week: string;
+    profit: number;
+}
+
 interface DashboardClientProps {
   stats: Stat[];
-  weeklyProfitData: typeof weeklyProfitDataType;
+  weeklyProfitData: weeklyProfitDataType[];
   recentProducts: Product[];
 }
 

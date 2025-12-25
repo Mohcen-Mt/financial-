@@ -7,15 +7,28 @@ import { DashboardClient } from '@/components/dashboard/dashboard-client';
 export default function DashboardPage() {
   const { products } = useProducts();
 
-  // Calculate stats based on products
-  const totalProfit = products.reduce((acc, p) => acc + (p.profit * (250-p.quantity)), 0);
-  const totalProducts = products.reduce((acc, p) => acc + p.quantity, 0);
-  const totalSales = products.reduce((acc, p) => acc + (250-p.quantity), 0);
+  // Assuming initial stock was 250 for each product to calculate sales
+  const INITIAL_STOCK = 250;
+
+  const totalSalesValue = products.reduce((acc, p) => {
+    const soldQuantity = INITIAL_STOCK - p.quantity;
+    return acc + (soldQuantity * p.sellPrice);
+  }, 0);
   
-  const bestSellingProduct = [...products].sort((a, b) => (b.sellPrice - b.buyPrice) - (a.sellPrice - a.buyPrice))[0] || {
-    name: 'N/A',
-    profit: 0
-  };
+  const totalProfit = products.reduce((acc, p) => {
+      const soldQuantity = INITIAL_STOCK - p.quantity;
+      return acc + (soldQuantity * p.profit);
+  }, 0);
+
+  const totalProducts = products.reduce((acc, p) => acc + p.quantity, 0);
+  
+  const totalSales = products.reduce((acc, p) => acc + (INITIAL_STOCK - p.quantity), 0);
+
+  const bestSellingProduct = [...products].sort((a, b) => {
+    const profitA = (INITIAL_STOCK - a.quantity) * a.profit;
+    const profitB = (INITIAL_STOCK - b.quantity) * b.profit;
+    return profitB - profitA;
+  })[0] || { name: 'N/A', profit: 0 };
 
   const stats = [
     {
@@ -25,14 +38,14 @@ export default function DashboardPage() {
       change: '+15.2%', // This can be made dynamic later
     },
     {
-      titleKey: 'totalProducts',
-      value: totalProducts,
-      icon: 'Package',
-      change: `+${products.length}`,
+        titleKey: 'totalRevenue',
+        value: `$${(totalSalesValue / 1000).toFixed(1)}k`,
+        icon: 'DollarSign',
+        change: '+20.1%',
     },
     {
       titleKey: 'totalSales',
-      value: totalSales,
+      value: `+${totalSales}`,
       icon: 'ShoppingCart',
       change: '+50', // This can be made dynamic later
     },
