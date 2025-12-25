@@ -1,3 +1,4 @@
+
 'use client';
 import { Header } from "@/components/layout/header";
 import { StatCard } from "@/components/dashboard/stat-card";
