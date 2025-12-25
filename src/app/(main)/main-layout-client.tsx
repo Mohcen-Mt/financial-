@@ -36,7 +36,7 @@ export function MainLayoutClient({
       </Sidebar>
       <SidebarInset className="flex flex-col">
         {/* The Header component will be rendered by child pages */}
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto" suppressHydrationWarning>
           {children}
         </main>
       </SidebarInset>

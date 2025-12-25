@@ -54,11 +54,11 @@ import { SellProductDialog } from '@/components/products/sell-product-dialog';
 
 const LOW_STOCK_THRESHOLD = 20;
 
-export function ProductsClient() {
+export function ProductsClient({ products }: { products: Product[] }) {
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
-  const { products, deleteProduct } = useProducts();
+  const { deleteProduct } = useProducts();
   const { toast } = useToast();
   const router = useRouter();
 
@@ -141,7 +141,7 @@ export function ProductsClient() {
   return (
     <>
       <Header title={'Products'} />
-      <div className="flex-1 space-y-4 p-4 pt-6 md:p-8">
+      <div className="flex-1 space-y-4 p-4 pt-6 md:p-8" suppressHydrationWarning>
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="flex flex-col gap-4 md:flex-row md:gap-2">
                 <Input
@@ -276,7 +276,7 @@ export function ProductsClient() {
                 </CardHeader>
                 <CardContent className="text-center">
                     <CardTitle className="font-headline text-2xl">No Products Found</CardTitle>
-                    <CardDescription className="mt-2">You haven't added any products yet. Get started by adding one.</CardDescription>
+                    <CardDescription className="mt-2">{"You haven't added any products yet. Get started by adding one."}</CardDescription>
                 </CardContent>
                 <CardFooter>
                     <Button asChild className="mt-4 gap-1">
