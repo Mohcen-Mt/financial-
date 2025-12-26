@@ -1,4 +1,6 @@
 import { config } from 'dotenv';
 config();
 
-import '@/ai/flows/ai-pricing-suggestions.ts';
+if (process.env.NODE_ENV === 'development') {
+    require('@/ai/flows/ai-pricing-suggestions.ts');
+}
