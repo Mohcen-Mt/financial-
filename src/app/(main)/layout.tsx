@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -30,7 +29,9 @@ export default function MainLayout({
           <SidebarNav />
         </SidebarContent>
         <SidebarFooter suppressHydrationWarning>
-          {/* Footer content if any */}
+          <div className="text-center text-xs text-muted-foreground p-2">
+            <p>Made by Mohcen</p>
+          </div>
         </SidebarFooter>
       </Sidebar>
       <SidebarInset className="flex flex-col" suppressHydrationWarning>
