@@ -30,6 +30,18 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  webpack: (config, { isServer, dev }) => {
+    // This prevents Genkit/AI related code from being bundled in production.
+    if (!dev) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        '@/ai/genkit': false,
+        '@/ai/flows/ai-pricing-suggestions': false,
+        '@/ai/dev': false,
+      };
+    }
+    return config;
+  },
 };
 
 export default nextConfig;
