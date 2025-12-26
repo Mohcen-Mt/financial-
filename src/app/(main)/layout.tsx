@@ -19,21 +19,21 @@ export default function MainLayout({
 }) {
   return (
     <>
-      <Sidebar side="left" collapsible="icon">
-        <SidebarHeader>
+      <Sidebar side="left" collapsible="icon" suppressHydrationWarning>
+        <SidebarHeader suppressHydrationWarning>
           <Button variant="ghost" className="h-12 justify-start gap-3 px-3 font-headline text-lg">
             <Flame className="h-6 w-6 text-primary" />
             <span className="font-bold">Financial Alchemist</span>
           </Button>
         </SidebarHeader>
-        <SidebarContent>
+        <SidebarContent suppressHydrationWarning>
           <SidebarNav />
         </SidebarContent>
-        <SidebarFooter>
+        <SidebarFooter suppressHydrationWarning>
           {/* Footer content if any */}
         </SidebarFooter>
       </Sidebar>
-      <SidebarInset className="flex flex-col">
+      <SidebarInset className="flex flex-col" suppressHydrationWarning>
         {/* The Header component will be rendered by child pages */}
         <main className="flex-1 overflow-y-auto">
           {children}
